@@ -43,7 +43,7 @@ const authLimiter = rateLimit({
 // CORS configuration
 app.use(cors({
   origin: [
-    'https://glassblogg.netlify.app',
+    'https://hashnode-blogging-platform.vercel.app', // Replace with your actual Vercel URL
     'http://localhost:3000',
     'http://localhost:5173'
   ],
