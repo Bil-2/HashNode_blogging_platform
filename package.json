@@ -6,12 +6,13 @@
   "scripts": {
   "server": "npm run dev --prefix server",
   "client": "npm run dev --prefix client",
-  "dev": "concurrently \"npm run server\" \"npm run client\""
+  "dev": "concurrently \"npm run server\" \"npm run client\"",
+  "test": "node test-deployment.js"
 },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
     "concurrently": "^9.2.0"
   }
