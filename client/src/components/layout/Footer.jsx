@@ -1,4 +1,4 @@
-import { TwitterIcon, GithubIcon, LinkedinIcon } from '../common/Icons';
+import { XIcon, GithubIcon, LinkedinIcon } from '../common/Icons';
 
 const Footer = () => (
     <footer className="mt-20 text-text-secondary px-4 sm:px-6 lg:px-8">
@@ -10,7 +10,7 @@ const Footer = () => (
                     </a>
                     <p className="mt-4 text-sm text-text-secondary">A modern blogging platform with a sleek glassmorphism design.</p>
                     <div className="flex space-x-4 mt-4">
-                        <a href="https://x.com/bag_biltu?s=21" target="_blank" rel="noopener noreferrer" className="text-text-secondary hover:text-text-primary transition-colors" aria-label="Twitter/X"><TwitterIcon /></a>
+                        <a href="https://x.com/bag_biltu?s=21" target="_blank" rel="noopener noreferrer" className="text-text-secondary hover:text-text-primary transition-colors" aria-label="X"><XIcon /></a>
                         <a href="https://github.com/Bil-2" target="_blank" rel="noopener noreferrer" className="text-text-secondary hover:text-text-primary transition-colors" aria-label="GitHub"><GithubIcon /></a>
                         <a href="https://www.linkedin.com/in/biltu-bag-01b5172a7/" target="_blank" rel="noopener noreferrer" className="text-text-secondary hover:text-text-primary transition-colors" aria-label="LinkedIn"><LinkedinIcon /></a>
                     </div>
@@ -51,7 +51,7 @@ const Footer = () => (
                                 src="https://media.licdn.com/dms/image/v2/D5603AQGAFqDci5xVWA/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1730699917222?e=1768608000&v=beta&t=Vh19WUEvY-UWxnJOs-7WgwPXTMIlNcg8YzVb-1nZdR4"
                                 alt="Biltu Bag"
                                 className="rounded-full w-[50px] h-[50px] border-2 border-indigo-500"
-                                onError={(e) => { e.target.onerror = null; e.target.src='https://placehold.co/50x50/6366F1/FFFFFF?text=BB'; }}
+                                onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/50x50/6366F1/FFFFFF?text=BB'; }}
                             />
                             <div className="ml-4">
                                 <p className="font-bold text-text-primary">BILTU BAG</p>

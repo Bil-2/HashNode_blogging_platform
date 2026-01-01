@@ -1,6 +1,7 @@
 import React from 'react';
 import { FiLink } from 'react-icons/fi';
-import { FaTwitter, FaLinkedin } from 'react-icons/fa';
+import { FaLinkedin } from 'react-icons/fa';
+import { XIcon } from '../common/Icons';
 import Spinner from '../common/Spinner';
 
 const UserProfileHeader = ({ profile, currentUser, onFollow, onEditProfile, onFollowersClick, onFollowingClick, isFollowingProcessing }) => {
@@ -16,7 +17,7 @@ const UserProfileHeader = ({ profile, currentUser, onFollow, onEditProfile, onFo
     };
 
     const websiteUrl = formatUrl(profile.website);
-    const twitterUrl = profile.twitter ? `https://twitter.com/${profile.twitter.replace('@', '')}` : null;
+    const twitterUrl = profile.twitter ? `https://x.com/${profile.twitter.replace('@', '')}` : null;
     const linkedinUrl = profile.linkedin ? `https://linkedin.com/in/${profile.linkedin}` : null;
 
     return (
@@ -58,9 +59,9 @@ const UserProfileHeader = ({ profile, currentUser, onFollow, onEditProfile, onFo
                             href={websiteUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center hover:text-indigo-400 min-w-0" 
+                            className="flex items-center hover:text-indigo-400 min-w-0"
                         >
-                            <FiLink className="mr-1 flex-shrink-0" /> 
+                            <FiLink className="mr-1 flex-shrink-0" />
                             <span className="truncate">{profile.website}</span>
                         </a>
                     )}
@@ -69,9 +70,9 @@ const UserProfileHeader = ({ profile, currentUser, onFollow, onEditProfile, onFo
                             href={twitterUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center hover:text-indigo-400 min-w-0" 
+                            className="flex items-center hover:text-indigo-400 min-w-0"
                         >
-                            <FaTwitter className="mr-1 flex-shrink-0" />
+                            <XIcon className="w-4 h-4 mr-1 flex-shrink-0 fill-current" />
                             <span className="truncate">{profile.twitter}</span>
                         </a>
                     )}

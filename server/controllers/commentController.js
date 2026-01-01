@@ -4,33 +4,33 @@ import asyncHandler from 'express-async-handler';
 import mongoose from 'mongoose';
 
 export const createComment = asyncHandler(async (req, res) => {
-  const { text, postId } = req.body;
-  if (!text || !postId) { res.status(400); throw new Error('Post ID and comment text are required'); }
-  if (!mongoose.Types.ObjectId.isValid(postId)) { res.status(404); throw new Error('Post not found (Invalid ID)'); }
-  const post = await Post.findById(postId);
-  if (!post) { res.status(404); throw new Error('Post not found'); }
-  if (!req.user || !req.user._id) { res.status(401); throw new Error('User not authenticated'); }
+    const { text, postId } = req.body;
+    if (!text || !postId) { res.status(400); throw new Error('Post ID and comment text are required'); }
+    if (!mongoose.Types.ObjectId.isValid(postId)) { res.status(404); throw new Error('Post not found (Invalid ID)'); }
+    const post = await Post.findById(postId);
+    if (!post) { res.status(404); throw new Error('Post not found'); }
+    if (!req.user || !req.user._id) { res.status(401); throw new Error('User not authenticated'); }
 
-  const comment = new Comment({ text, post: postId, user: req.user._id });
-  const createdComment = await comment.save();
+    const comment = new Comment({ text, post: postId, user: req.user._id });
+    const createdComment = await comment.save();
 
-  try {
-    post.comments.push(createdComment._id);
-    await post.save();
-    console.log(`[commentController.js] Added comment ${createdComment._id} to post ${postId}`);
-  } catch (updateError) {
-      console.error(`[commentController.js] Failed to add comment ref to post ${postId}:`, updateError);
-      await Comment.findByIdAndDelete(createdComment._id);
-      throw new Error('Failed to link comment to post');
-  }
+    try {
+        post.comments.push(createdComment._id);
+        await post.save();
 
-  const populatedComment = await Comment.findById(createdComment._id)
-                                        .populate('user', 'name avatar _id');
-  if (!populatedComment) {
-       console.error(`[commentController.js] Failed to populate comment ${createdComment._id} after creation.`);
-       return res.status(201).json(createdComment);
-  }
-  res.status(201).json(populatedComment);
+    } catch (updateError) {
+
+        await Comment.findByIdAndDelete(createdComment._id);
+        throw new Error('Failed to link comment to post');
+    }
+
+    const populatedComment = await Comment.findById(createdComment._id)
+        .populate('user', 'name avatar _id');
+    if (!populatedComment) {
+
+        return res.status(201).json(createdComment);
+    }
+    res.status(201).json(populatedComment);
 });
 
 export const getCommentsByPostId = asyncHandler(async (req, res) => {
@@ -38,8 +38,8 @@ export const getCommentsByPostId = asyncHandler(async (req, res) => {
         res.status(404); throw new Error('Post not found (Invalid ID)');
     }
     const comments = await Comment.find({ post: req.params.postId })
-                                  .populate('user', 'name avatar _id')
-                                  .sort({ createdAt: -1 });
+        .populate('user', 'name avatar _id')
+        .sort({ createdAt: -1 });
     res.json(comments);
 });
 
@@ -63,7 +63,7 @@ export const updateComment = asyncHandler(async (req, res) => {
         throw new Error('Comment not found');
     }
 
-    
+
     if (comment.user.toString() !== req.user._id.toString()) {
         res.status(401);
         throw new Error('User not authorized to update this comment');
@@ -73,7 +73,7 @@ export const updateComment = asyncHandler(async (req, res) => {
     const updatedComment = await comment.save();
 
     const populatedComment = await Comment.findById(updatedComment._id)
-                                          .populate('user', 'name avatar _id');
+        .populate('user', 'name avatar _id');
 
     res.json(populatedComment || updatedComment);
 });
@@ -94,21 +94,21 @@ export const deleteComment = asyncHandler(async (req, res) => {
     }
 
     if (comment.user.toString() !== req.user._id.toString()) {
-        res.status(401); 
+        res.status(401);
         throw new Error('User not authorized to delete this comment');
     }
 
-    const postId = comment.post; 
+    const postId = comment.post;
 
-    await comment.deleteOne(); 
+    await comment.deleteOne();
 
     try {
         await Post.findByIdAndUpdate(postId, {
             $pull: { comments: commentId }
         });
-        console.log(`[commentController.js] Removed comment ref ${commentId} from post ${postId}`);
+
     } catch (postUpdateError) {
-        console.error(`[commentController.js] Failed to remove comment ref from post ${postId}:`, postUpdateError);
+
     }
 
     res.json({ message: 'Comment removed successfully' });

@@ -23,9 +23,9 @@ export const postService = {
                 ...(search && { search }),
                 ...(category && { category })
             });
-            
+
             const { data } = await axios.get(`/posts?${queryParams}`);
-            
+
             // Handle new paginated response format
             if (data.posts) {
                 return {
@@ -33,7 +33,7 @@ export const postService = {
                         ...post,
                         id: post._id,
                         author: {
-                            id: post.author?._id || post.author, 
+                            id: post.author?._id || post.author,
                             name: post.author?.name || 'Unknown Author',
                             avatar: post.author?.avatar || `https://placehold.net/avatar-4.svg`
                         }
@@ -44,14 +44,14 @@ export const postService = {
                     hasMore: data.hasMore
                 };
             }
-            
+
             // Fallback for old format (backward compatibility)
             return {
                 posts: data.map(post => ({
                     ...post,
                     id: post._id,
                     author: {
-                        id: post.author?._id || post.author, 
+                        id: post.author?._id || post.author,
                         name: post.author?.name || 'Unknown Author',
                         avatar: post.author?.avatar || `https://placehold.net/avatar-4.svg`
                     }
@@ -75,29 +75,29 @@ export const postService = {
 
     getPostById: async (id) => {
         const config = getAuthConfig();
-         if (!config) return null;
+        if (!config) return null;
         try {
             const { data } = await axios.get(`/posts/${id}`, config);
-            console.log(`postService.getPostById (${id}) - Raw response data:`, data);
+
 
             const postResult = {
-                ...data, 
+                ...data,
                 id: data._id,
-                author: { 
+                author: {
                     id: data.author?._id || data.author?.id,
                     name: data.author?.name || 'Unknown Author',
                     avatar: data.author?.avatar || `https://placehold.net/avatar-4.svg`
                 },
                 comments: Array.isArray(data.comments) ? data.comments.map(c => ({
-                    ...(c || {}), 
-                    id: c?._id || c?.id, 
-                    user: c?.user ? { 
-                        ...(c.user || {}), 
-                        id: c.user._id || c.user.id 
-                    } : { name: 'User', id: null } 
-                })) : [] 
-             };
-             console.log(`postService.getPostById (${id}) - Mapped result:`, postResult);
+                    ...(c || {}),
+                    id: c?._id || c?.id,
+                    user: c?.user ? {
+                        ...(c.user || {}),
+                        id: c.user._id || c.user.id
+                    } : { name: 'User', id: null }
+                })) : []
+            };
+
             return postResult;
         } catch (error) {
             console.error(`Failed to fetch post ${id}:`, error.response?.data?.message || error.message);
@@ -106,25 +106,26 @@ export const postService = {
     },
 
     createPost: async (postData) => {
-         const config = getAuthConfig();
-         if (!config) throw new Error("Authentication required");
-         const { id, ...payload } = postData;
-        
+        const config = getAuthConfig();
+        if (!config) throw new Error("Authentication required");
+        const payload = { ...postData };
+        delete payload.id;
+
         // Log what we're sending
-        console.log("Creating post with payload:", payload);
-        
+
+
         try {
-             const { data } = await axios.post('/posts', payload, config);
-             return { 
-                 ...data,
-                 id: data._id,
-                 author: {
-                     id: data.author?._id || data.author?.id,
-                     name: data.author?.name || 'Unknown Author',
-                     avatar: data.author?.avatar || `https://placehold.net/avatar-4.svg`
-                 },
-                 comments: data.comments || [], 
-                 likes: data.likes || [] 
+            const { data } = await axios.post('/posts', payload, config);
+            return {
+                ...data,
+                id: data._id,
+                author: {
+                    id: data.author?._id || data.author?.id,
+                    name: data.author?.name || 'Unknown Author',
+                    avatar: data.author?.avatar || `https://placehold.net/avatar-4.svg`
+                },
+                comments: data.comments || [],
+                likes: data.likes || []
             };
         } catch (error) {
             console.error("Failed to create post:", error.response?.data?.message || error.message);
@@ -134,47 +135,49 @@ export const postService = {
         }
     },
 
-     updatePost: async (postId, postData) => {
-         const config = getAuthConfig();
-         if (!config) throw new Error("Authentication required");
-         const { id, _id, ...payload } = postData;
-         try {
-             const { data } = await axios.put(`/posts/${postId}`, payload, config);
-             return { 
-                 ...data,
-                 id: data._id,
-                 author: {
-                     id: data.author?._id || data.author?.id,
-                     name: data.author?.name || 'Unknown Author',
-                     avatar: data.author?.avatar || `https://placehold.net/avatar-4.svg`
-                 },
-                 comments: data.comments || [],
-                 likes: data.likes || []
-             };
-         } catch (error) {
-             console.error(`Failed to update post ${postId}:`, error.response?.data?.message || error.message);
-             throw error;
-         }
-     },
+    updatePost: async (postId, postData) => {
+        const config = getAuthConfig();
+        if (!config) throw new Error("Authentication required");
+        const payload = { ...postData };
+        delete payload.id;
+        delete payload._id;
+        try {
+            const { data } = await axios.put(`/posts/${postId}`, payload, config);
+            return {
+                ...data,
+                id: data._id,
+                author: {
+                    id: data.author?._id || data.author?.id,
+                    name: data.author?.name || 'Unknown Author',
+                    avatar: data.author?.avatar || `https://placehold.net/avatar-4.svg`
+                },
+                comments: data.comments || [],
+                likes: data.likes || []
+            };
+        } catch (error) {
+            console.error(`Failed to update post ${postId}:`, error.response?.data?.message || error.message);
+            throw error;
+        }
+    },
 
-     deletePost: async (postId) => {
-         const config = getAuthConfig();
-         if (!config) throw new Error("Authentication required");
-         try {
-             await axios.delete(`/posts/${postId}`, config);
-             return { message: 'Post deleted successfully' };
-         } catch (error) {
-             console.error(`Failed to delete post ${postId}:`, error.response?.data?.message || error.message);
-             throw error;
-         }
-     },
+    deletePost: async (postId) => {
+        const config = getAuthConfig();
+        if (!config) throw new Error("Authentication required");
+        try {
+            await axios.delete(`/posts/${postId}`, config);
+            return { message: 'Post deleted successfully' };
+        } catch (error) {
+            console.error(`Failed to delete post ${postId}:`, error.response?.data?.message || error.message);
+            throw error;
+        }
+    },
 
     likePost: async (postId) => {
         const config = getAuthConfig();
         if (!config) throw new Error("Authentication required");
         try {
             const { data } = await axios.put(`/posts/${postId}/like`, {}, config);
-            return data; 
+            return data;
         } catch (error) {
             console.error(`Failed to like post ${postId}:`, error.response?.data?.message || error.message);
             throw error;
@@ -186,7 +189,7 @@ export const postService = {
         if (!config) throw new Error("Authentication required");
         try {
             const { data } = await axios.put(`/posts/${postId}/unlike`, {}, config);
-            return data; 
+            return data;
         } catch (error) {
             console.error(`Failed to unlike post ${postId}:`, error.response?.data?.message || error.message);
             throw error;

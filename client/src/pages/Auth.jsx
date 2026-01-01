@@ -4,20 +4,20 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAppContext } from '@/hooks/useAuth';
 import Button from '@/components/common/Button';
 import GoogleSignInButton from '@/components/common/GoogleSignInButton';
-import { authService } from '@/api/authService'; 
+import { authService } from '@/api/authService';
 
 const useIsDesktop = () => {
-  const [isDesktop, setIsDesktop] = useState(false);
+    const [isDesktop, setIsDesktop] = useState(false);
 
-  useEffect(() => {
-    const media = window.matchMedia('(min-width: 768px)');
-    const updateMatch = () => setIsDesktop(media.matches);
-    updateMatch();
-    media.addEventListener('change', updateMatch);
-    return () => media.removeEventListener('change', updateMatch);
-  }, []);
+    useEffect(() => {
+        const media = window.matchMedia('(min-width: 768px)');
+        const updateMatch = () => setIsDesktop(media.matches);
+        updateMatch();
+        media.addEventListener('change', updateMatch);
+        return () => media.removeEventListener('change', updateMatch);
+    }, []);
 
-  return isDesktop;
+    return isDesktop;
 };
 
 const FormInput = ({ id, label, type, value, onChange, placeholder, required = true }) => (
@@ -99,8 +99,8 @@ const AuthPage = () => {
     const [view, setView] = useState(
         location.state?.show === 'register' ? 'register' : 'login'
     );
-    
-    const isDesktop = useIsDesktop(); 
+
+    const isDesktop = useIsDesktop();
 
     useEffect(() => {
         if (location.state?.show === 'register') {
@@ -108,7 +108,7 @@ const AuthPage = () => {
         } else if (location.pathname === '/auth' && view !== 'forgot') {
             setView('login');
         }
-    }, [location.state, location.pathname]);
+    }, [location.state, location.pathname, view]);
 
     useEffect(() => {
         if (!loading && isAuthenticated) {
@@ -135,19 +135,19 @@ const AuthPage = () => {
             />
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, ease: "easeOut" }} className="relative w-full max-w-4xl h-[600px] bg-white/5 backdrop-blur-lg rounded-2xl shadow-2xl border border-white/10 overflow-hidden" >
                 <div className="w-full h-full relative overflow-hidden">
-                    
-                    <motion.div 
-                        animate={{ x: view === 'login' ? '0%' : (isDesktop ? '100%' : '0%') }} 
-                        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} 
+
+                    <motion.div
+                        animate={{ x: view === 'login' ? '0%' : (isDesktop ? '100%' : '0%') }}
+                        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
                         className="absolute top-0 left-0 w-full md:w-1/2 h-full p-8 md:p-12 z-20 flex flex-col justify-center"
                     >
                         <AnimatePresence mode="wait">
-                            <motion.div 
-                                key={view} 
-                                initial={{ opacity: 0, x: -50 }} 
-                                animate={{ opacity: 1, x: 0 }} 
-                                exit={{ opacity: 0, x: 50 }} 
-                                transition={{ duration: 0.5 }} 
+                            <motion.div
+                                key={view}
+                                initial={{ opacity: 0, x: -50 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: 50 }}
+                                transition={{ duration: 0.5 }}
                             >
                                 {view === 'login' && <LoginForm setView={setView} />}
                                 {view === 'register' && <RegisterForm setView={setView} />}
@@ -156,20 +156,20 @@ const AuthPage = () => {
                         </AnimatePresence>
                     </motion.div>
 
-                    <motion.div 
+                    <motion.div
                         animate={{ x: view === 'login' ? '0%' : (isDesktop ? '-100%' : '0%') }}
-                        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} 
-                        className="hidden md:block absolute top-0 right-0 w-1/2 h-full z-50" 
+                        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                        className="hidden md:block absolute top-0 right-0 w-1/2 h-full z-50"
                     >
                         <div className="w-full h-full bg-cover bg-center opacity-70" style={{ backgroundImage: backgroundImageUrl }}>
                             <div className="w-full h-full bg-black/30 p-8 flex flex-col justify-end text-white">
                                 <AnimatePresence mode="wait">
-                                    <motion.div 
+                                    <motion.div
                                         key={view === 'register' ? 'join' : 'welcome'}
-                                        initial={{ opacity: 0, y: 20 }} 
-                                        animate={{ opacity: 1, y: 0 }} 
-                                        exit={{ opacity: 0, y: -20 }} 
-                                        transition={{ duration: 0.5 }} 
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -20 }}
+                                        transition={{ duration: 0.5 }}
                                     >
                                         <h2 className="text-3xl font-bold">{view === 'register' ? 'Join a Community of Thinkers' : 'Welcome Back!'}</h2>
                                         <p className="text-gray-300 mt-2">{view === 'register' ? 'Share your ideas, connect with others, and grow your audience.' : 'Login and pick up where you left off. We missed you!'}</p>
@@ -196,10 +196,11 @@ const LoginForm = ({ setView }) => {
         e.preventDefault();
         setError('');
         setIsLoading(true);
-        try { 
+        try {
             await login(email, password);
-            navigate('/dashboard', { replace: true }); 
-        } catch (err) { setError(err?.message || 'Login failed'); 
+            navigate('/dashboard', { replace: true });
+        } catch (err) {
+            setError(err?.message || 'Login failed');
         } finally { setIsLoading(false); }
     };
 
@@ -210,11 +211,11 @@ const LoginForm = ({ setView }) => {
                 {error && <p className="text-red-400 text-center">{error}</p>}
                 <motion.div variants={formItemVariants}><FormInput id="email" label="Email Address" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" /></motion.div>
                 <motion.div variants={formItemVariants}><PasswordInput id="password" label="Password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" /></motion.div>
-                
+
                 <div className="text-right text-sm">
-                    <button 
+                    <button
                         type="button"
-                        onClick={() => setView('forgot')} 
+                        onClick={() => setView('forgot')}
                         className="font-medium text-indigo-400 hover:text-indigo-300 underline"
                     >
                         Forgot your password?
@@ -223,7 +224,7 @@ const LoginForm = ({ setView }) => {
 
                 <motion.div variants={formItemVariants}><Button type="submit" isLoading={isLoading}>Log in</Button></motion.div>
             </form>
-            
+
             <motion.div variants={formItemVariants} className="mt-6">
                 <div className="relative">
                     <div className="absolute inset-0 flex items-center">
@@ -237,9 +238,9 @@ const LoginForm = ({ setView }) => {
                     <GoogleSignInButton text="Sign in with Google" />
                 </div>
             </motion.div>
-            
+
             <motion.p variants={formItemVariants} className="mt-4 text-center text-sm text-text-secondary">
-                Don't have an account?{' '}
+                Don&apos;t have an account?{' '}
                 <button onClick={() => setView('register')} className="font-medium text-indigo-400 hover:text-indigo-300 underline">Sign up</button>
             </motion.p>
         </motion.div>
@@ -289,7 +290,7 @@ const RegisterForm = ({ setView }) => {
                 </motion.div>
                 <motion.div variants={formItemVariants}><Button type="submit" isLoading={isLoading}>Create Account</Button></motion.div>
             </form>
-            
+
             <motion.div variants={formItemVariants} className="mt-6">
                 <div className="relative">
                     <div className="absolute inset-0 flex items-center">
@@ -303,7 +304,7 @@ const RegisterForm = ({ setView }) => {
                     <GoogleSignInButton text="Sign up with Google" />
                 </div>
             </motion.div>
-            
+
             <motion.p variants={formItemVariants} className="mt-4 text-center text-sm text-text-secondary">
                 Already have an account?{' '}
                 <button onClick={() => setView('login')} className="font-medium text-indigo-400 hover:text-indigo-300 underline">Log in</button>
@@ -323,13 +324,13 @@ const ForgotPasswordForm = ({ setView }) => {
         setError('');
         setMessage('');
         setIsLoading(true);
-        try { 
+        try {
             await authService.forgotPassword(email);
             setMessage('Password reset link has been sent to your email.');
-        } catch (err) { 
-            setError(err?.message || 'Failed to send email'); 
-        } finally { 
-            setIsLoading(false); 
+        } catch (err) {
+            setError(err?.message || 'Failed to send email');
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -337,7 +338,7 @@ const ForgotPasswordForm = ({ setView }) => {
         <motion.div variants={formVariants} initial="hidden" animate="visible">
             <motion.h2 variants={formItemVariants} className="text-center text-3xl font-extrabold text-text-primary">Forgot Password</motion.h2>
             <p className="mt-2 text-center text-sm text-text-secondary">
-                Enter your email and we'll send you a link to reset your password.
+                Enter your email and we&apos;ll send you a link to reset your password.
             </p>
             <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
                 {error && <p className="text-red-400 text-center">{error}</p>}

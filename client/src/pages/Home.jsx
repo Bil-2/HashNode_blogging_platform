@@ -23,7 +23,7 @@ const AnimatedCounter = ({ end, duration = 2000, suffix = '' }) => {
             const animate = (currentTime) => {
                 if (!startTime) startTime = currentTime;
                 const progress = Math.min((currentTime - startTime) / duration, 1);
-                
+
                 // Easing function for smooth animation
                 const easeOutQuart = 1 - Math.pow(1 - progress, 4);
                 setCount(Math.floor(easeOutQuart * end));
@@ -75,7 +75,7 @@ const RotatingTestimonials = () => {
         const interval = setInterval(() => {
             // Fade out slowly
             setIsVisible(false);
-            
+
             // Wait for slow fade out, then change testimonial
             setTimeout(() => {
                 setCurrentIndex((prev) => (prev + 1) % testimonials.length);
@@ -88,24 +88,22 @@ const RotatingTestimonials = () => {
 
     return (
         <div className="mt-10 flex justify-center">
-            <div 
-                className={`bg-glass p-8 rounded-xl border border-glass text-left max-w-2xl w-full transition-all duration-1000 ease-in-out ${
-                    isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'
-                }`}
+            <div
+                className={`bg-glass p-8 rounded-xl border border-glass text-left max-w-2xl w-full transition-all duration-1000 ease-in-out ${isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'
+                    }`}
             >
-                <p className="text-text-secondary text-lg italic">"{testimonials[currentIndex].text}"</p>
+                <p className="text-text-secondary text-lg italic">&quot;{testimonials[currentIndex].text}&quot;</p>
                 <p className="mt-4 font-bold text-text-primary">- {testimonials[currentIndex].author}</p>
-                
+
                 {/* Progress Dots */}
                 <div className="flex justify-center mt-6 space-x-2">
                     {testimonials.map((_, index) => (
                         <div
                             key={index}
-                            className={`h-2 rounded-full transition-all duration-300 ${
-                                index === currentIndex 
-                                    ? 'w-8 bg-indigo-500' 
+                            className={`h-2 rounded-full transition-all duration-300 ${index === currentIndex
+                                    ? 'w-8 bg-indigo-500'
                                     : 'w-2 bg-text-secondary/30'
-                            }`}
+                                }`}
                         />
                     ))}
                 </div>
@@ -166,18 +164,18 @@ const HomePage = () => {
         };
         fetchPosts();
     }, []);
-    
+
     const categories = ["Tech", "Travel", "Lifestyle", "Finance", "Health", "Food"];
 
     return (
         <>
             {/* Hero Section */}
             <div className="relative h-[100vh] overflow-hidden scroll-snap-section">
-                <video 
-                    autoPlay 
-                    loop 
-                    muted 
-                    playsInline 
+                <video
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
                     className="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-20"
                     style={{ transform: `translateY(${parallaxOffset}px)` }}
                 >
@@ -209,7 +207,7 @@ const HomePage = () => {
             <AnimatedSection className="py-20 px-4 scroll-snap-section">
                 <div className="max-w-7xl mx-auto">
                     <h2 className="text-4xl font-extrabold text-text-primary text-center mb-16">Why Choose HashNode?</h2>
-                    
+
                     <div className="bg-glass backdrop-blur-sm rounded-3xl border border-glass p-12">
                         <div className="grid lg:grid-cols-2 gap-12 items-start">
                             {/* Left side - Features */}
@@ -223,17 +221,17 @@ const HomePage = () => {
                                         <p className="text-text-secondary leading-relaxed">Our unique glassmorphism design provides a clean, modern, and visually stunning reading and writing experience.</p>
                                     </div>
                                 </div>
-                                
+
                                 <div className="flex items-start space-x-4">
                                     <div className="bg-glass p-3 rounded-lg border border-glass flex-shrink-0">
                                         <CommentIcon className="w-6 h-6 text-text-primary" />
                                     </div>
                                     <div>
                                         <h3 className="text-xl font-bold text-text-primary mb-2">Community Focused</h3>
-                                        <p className="text-text-secondary leading-relaxed">We're more than a platform; we're a community. Engage with writers, get feedback, and grow together.</p>
+                                        <p className="text-text-secondary leading-relaxed">We&apos;re more than a platform; we&apos;re a community. Engage with writers, get feedback, and grow together.</p>
                                     </div>
                                 </div>
-                                
+
                                 <div className="flex items-start space-x-4">
                                     <div className="bg-glass p-3 rounded-lg border border-glass flex-shrink-0">
                                         <EditIcon className="w-6 h-6 text-text-primary" />
@@ -243,7 +241,7 @@ const HomePage = () => {
                                         <p className="text-text-secondary leading-relaxed">Rich text editor, image uploads, categories, and everything you need to create amazing content.</p>
                                     </div>
                                 </div>
-                                
+
                                 <div className="flex items-start space-x-4">
                                     <div className="bg-glass p-3 rounded-lg border border-glass flex-shrink-0">
                                         <HeartIcon className="w-6 h-6 text-text-primary" />
@@ -261,7 +259,7 @@ const HomePage = () => {
                                     <h3 className="text-6xl font-bold text-indigo-400 mb-2">Community</h3>
                                     <p className="text-text-secondary">Join thousands of writers</p>
                                 </div>
-                                
+
                                 {/* Stats Grid */}
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="bg-glass backdrop-blur-sm border border-glass rounded-xl p-6 text-center">
@@ -316,8 +314,8 @@ const HomePage = () => {
                         <>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
                                 {posts.map((post, index) => (
-                                    <div 
-                                        key={post.id} 
+                                    <div
+                                        key={post.id}
                                         className="transform transition-all duration-300 hover:scale-105"
                                         style={{ animationDelay: `${index * 100}ms` }}
                                     >
@@ -325,7 +323,7 @@ const HomePage = () => {
                                     </div>
                                 ))}
                             </div>
-                            
+
                             {/* View All Button */}
                             <div className="text-center">
                                 <button
@@ -333,10 +331,10 @@ const HomePage = () => {
                                     className="group relative inline-flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg hover:shadow-indigo-500/50 transition-all duration-300 hover:scale-105"
                                 >
                                     <span>Explore All Blogs</span>
-                                    <svg 
-                                        className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" 
-                                        fill="none" 
-                                        stroke="currentColor" 
+                                    <svg
+                                        className="w-5 h-5 transform group-hover:translate-x-1 transition-transform"
+                                        fill="none"
+                                        stroke="currentColor"
                                         viewBox="0 0 24 24"
                                     >
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -366,10 +364,10 @@ const HomePage = () => {
             <AnimatedSection className="py-20 px-4 scroll-snap-section">
                 <div className="max-w-5xl mx-auto text-center"><h2 className="text-3xl font-bold text-text-primary">Popular Categories</h2><div className="mt-10 flex flex-wrap justify-center gap-4">{categories.map(cat => (<button key={cat} onClick={() => navigate('/categories')} className="bg-glass backdrop-blur-sm border border-glass text-text-primary px-5 py-2 rounded-full font-semibold hover:bg-white/20 transition-colors">{cat}</button>))}</div></div>
             </AnimatedSection>
-            
+
             {/* Community Stats & Testimonials Section */}
             <AnimatedSection className="py-20 px-4 scroll-snap-section">
-                 <div className="max-w-5xl mx-auto text-center">
+                <div className="max-w-5xl mx-auto text-center">
                     <div className="grid grid-cols-3 gap-8 mb-10">
                         <div className="transform transition-transform duration-300 hover:scale-110">
                             <p className="text-4xl font-bold text-indigo-400">
@@ -404,12 +402,12 @@ const HomePage = () => {
                     <RotatingTestimonials />
                 </div>
             </AnimatedSection>
-            
+
             {/* FAQ Section */}
             <div className="py-20 px-4">
                 <div className="max-w-3xl mx-auto"><h2 className="text-4xl font-extrabold text-text-primary text-center mb-12">Frequently Asked Questions</h2><div className="space-y-4"><FaqItem question="Is HashNode free to use?" answer="Yes, HashNode is completely free for both readers and writers. You can sign up and start publishing your stories today without any cost." /><FaqItem question="Can I customize my blog's appearance?" answer="While we maintain a consistent and beautiful design across the platform, you can customize your profile page with a banner, profile picture, and bio to express your personality." /><FaqItem question="How do I get my blog featured?" answer="Our editorial team regularly reviews new content. High-quality, engaging, and original posts have the best chance of being featured on our homepage and in our newsletter." /></div></div>
             </div>
-            
+
             {/* CTA Section */}
             <AnimatedSection className="py-20 px-4">
                 <div className="max-w-4xl mx-auto text-center bg-glass p-12 rounded-xl border border-glass"><h2 className="text-4xl font-bold text-text-primary">Ready to share your thoughts?</h2><p className="mt-4 text-text-secondary">Start your blog today!</p><div className="mt-8 flex justify-center"><button onClick={() => navigate('/auth', { state: { show: 'register' } })} className="bg-indigo-500 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-indigo-600 transition-colors">Get Started / Join Now</button></div></div>

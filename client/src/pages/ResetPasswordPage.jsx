@@ -43,7 +43,7 @@ const ResetPasswordPage = () => {
         setIsLoading(true);
 
         try {
-            const { token: authToken, user } = await authService.resetPassword(token, password);
+            const { user } = await authService.resetPassword(token, password);
             setMessage('Password reset successfully! Logging you in...');
 
             await login(user.email, password);

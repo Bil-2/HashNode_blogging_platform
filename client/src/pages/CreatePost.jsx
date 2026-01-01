@@ -9,7 +9,7 @@ const CreatePostPage = () => {
     const [category, setCategory] = useState('Technology');
     const [imageUrl, setImageUrl] = useState('https://placehold.co/800x400/1B263B/E0E1DD?text=New+Post');
     const [isLoading, setIsLoading] = useState(false);
-    const { user, addPost } = useAppContext(); 
+    const { addPost } = useAppContext();
     const navigate = useNavigate();
 
     const categories = ['Technology', 'Travel', 'Lifestyle', 'Finance', 'Health', 'Food', 'Business', 'Education', 'Entertainment', 'Sports', 'Other'];
@@ -26,13 +26,13 @@ const CreatePostPage = () => {
                 status: 'published',
                 publishedAt: new Date()
             };
-            
+
             await addPost(newPostData);
-            
+
             navigate('/dashboard');
         } catch (err) {
             console.error("Failed to create post", err);
-            const errorMessage = err.response?.data?.errors 
+            const errorMessage = err.response?.data?.errors
                 ? err.response.data.errors.map(e => `${e.field}: ${e.message}`).join('\n')
                 : (err.response?.data?.message || err.message);
             alert('Failed to create post:\n\n' + errorMessage);
@@ -48,7 +48,7 @@ const CreatePostPage = () => {
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
                         <label htmlFor="title" className="block text-sm font-medium text-text-secondary">Title</label>
-                        <input type="text" name="title" id="title" value={title} onChange={(e) => setTitle(e.target.value)} required className="mt-1 block w-full px-3 py-2 border border-glass bg-transparent rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-text-primary"/>
+                        <input type="text" name="title" id="title" value={title} onChange={(e) => setTitle(e.target.value)} required className="mt-1 block w-full px-3 py-2 border border-glass bg-transparent rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-text-primary" />
                     </div>
                     <div>
                         <label htmlFor="category" className="block text-sm font-medium text-text-secondary">Category</label>
@@ -58,21 +58,21 @@ const CreatePostPage = () => {
                             ))}
                         </select>
                     </div>
-                     <div>
+                    <div>
                         <label htmlFor="imageUrl" className="block text-sm font-medium text-text-secondary">Image URL (Optional)</label>
-                        <input type="text" name="imageUrl" id="imageUrl" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} className="mt-1 block w-full px-3 py-2 border border-glass bg-transparent rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-text-primary"/>
+                        <input type="text" name="imageUrl" id="imageUrl" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} className="mt-1 block w-full px-3 py-2 border border-glass bg-transparent rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-text-primary" />
                     </div>
                     <div>
                         <label htmlFor="content" className="block text-sm font-medium text-text-secondary">
                             Content (minimum 10 characters)
                         </label>
-                        <textarea 
-                            name="content" 
-                            id="content" 
-                            rows="10" 
-                            value={content} 
-                            onChange={(e) => setContent(e.target.value)} 
-                            required 
+                        <textarea
+                            name="content"
+                            id="content"
+                            rows="10"
+                            value={content}
+                            onChange={(e) => setContent(e.target.value)}
+                            required
                             minLength={10}
                             className="mt-1 block w-full px-3 py-2 border border-glass bg-transparent rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-text-primary"
                         ></textarea>

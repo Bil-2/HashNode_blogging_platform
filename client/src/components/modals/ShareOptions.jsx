@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { TwitterIcon, FacebookIcon, LinkedinIcon, WhatsAppIcon } from '../common/Icons';
+import { XIcon, FacebookIcon, LinkedinIcon, WhatsAppIcon } from '../common/Icons';
 
 const ShareOptions = ({ blog }) => {
+    const [copied, setCopied] = useState(false);
+
     if (!blog || !(blog.id || blog._id) || !blog.title) {
         return <p className="text-text-secondary">Cannot generate share links: Blog data is missing.</p>;
     }
@@ -20,7 +22,7 @@ const ShareOptions = ({ blog }) => {
         whatsapp: `https://api.whatsapp.com/send?text=${encodeURIComponent(text + ' ' + url)}`
     };
 
-    const [copied, setCopied] = useState(false);
+
     const copyToClipboard = async () => {
         if (!navigator.clipboard) {
             const textArea = document.createElement("textarea");
@@ -52,24 +54,24 @@ const ShareOptions = ({ blog }) => {
         <div className="space-y-4 text-text-primary">
             <p className="text-sm text-text-secondary">Share this post via:</p>
             <div className="flex items-center space-x-2 bg-white/10 p-2 rounded-lg">
-                <input type="text" readOnly value={url} className="w-full bg-transparent text-sm text-white/80 outline-none" aria-label="Post URL"/>
+                <input type="text" readOnly value={url} className="w-full bg-transparent text-sm text-white/80 outline-none" aria-label="Post URL" />
                 <button onClick={copyToClipboard} className="bg-indigo-500 text-white px-3 py-1 text-sm rounded-md hover:bg-indigo-600 transition w-20 text-center">
                     {copied ? 'Copied!' : 'Copy Link'}
                 </button>
             </div>
             <div className="flex justify-around pt-2">
-                <a href={shareLinks.twitter} target="_blank" rel="noopener noreferrer" className="p-3 rounded-full text-text-secondary hover:text-white hover:bg-white/10 transition" aria-label="Share on Twitter">
-                    <TwitterIcon />
+                <a href={shareLinks.twitter} target="_blank" rel="noopener noreferrer" className="p-3 rounded-full text-text-secondary hover:text-white hover:bg-white/10 transition" aria-label="Share on X">
+                    <XIcon />
                 </a>
                 <a href={shareLinks.facebook} target="_blank" rel="noopener noreferrer" className="p-3 rounded-full text-text-secondary hover:text-white hover:bg-white/10 transition" aria-label="Share on Facebook">
-                    <FacebookIcon className="w-6 h-6 fill-current"/>
+                    <FacebookIcon className="w-6 h-6 fill-current" />
                 </a>
                 <a href={shareLinks.linkedin} target="_blank" rel="noopener noreferrer" className="p-3 rounded-full text-text-secondary hover:text-white hover:bg-white/10 transition" aria-label="Share on LinkedIn">
                     {/* Correct usage */}
                     <LinkedinIcon />
                 </a>
                 <a href={shareLinks.whatsapp} target="_blank" rel="noopener noreferrer" className="p-3 rounded-full text-text-secondary hover:text-white hover:bg-white/10 transition" aria-label="Share on WhatsApp">
-                    <WhatsAppIcon className="w-6 h-6 fill-current"/>
+                    <WhatsAppIcon className="w-6 h-6 fill-current" />
                 </a>
             </div>
         </div>

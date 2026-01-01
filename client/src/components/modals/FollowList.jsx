@@ -1,6 +1,6 @@
 import React from 'react';
 
-const FollowList = ({ title, users, currentUser, onFollow, onProfileClick, onClose }) => (
+const FollowList = ({ users, currentUser, onFollow, onProfileClick, onClose }) => (
     <ul className="space-y-3 max-h-[70vh] overflow-y-auto pr-2">
         {users && users.length > 0 ? users.map(user => {
             if (!user) return null;
@@ -10,7 +10,7 @@ const FollowList = ({ title, users, currentUser, onFollow, onProfileClick, onClo
             return (
                 <li key={user.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-white/10 transition-colors">
                     <button onClick={() => { onProfileClick(user); onClose(); }} className="flex items-center">
-                        <img src={user.avatar || 'https://placehold.net/avatar-4.svg'} className="w-10 h-10 rounded-full mr-3" alt={user.name}/>
+                        <img src={user.avatar || 'https://placehold.net/avatar-4.svg'} className="w-10 h-10 rounded-full mr-3" alt={user.name} />
                         <span className="font-semibold">{user.name}</span>
                     </button>
                     {!isCurrentUser && (

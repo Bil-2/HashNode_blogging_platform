@@ -1,11 +1,12 @@
-import React, { useState, useEffect, createContext, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { AppContext } from './AppContext';
 import axios from 'axios';
 import { authService } from '../api/authService';
 import { postService } from '../api/postService';
 import { userService } from '../api/userService';
 import Spinner from '../components/common/Spinner';
 
-export const AppContext = createContext(null);
+
 
 export const AppProvider = ({ children }) => {
     const [user, setUser] = useState(null);
@@ -19,7 +20,7 @@ export const AppProvider = ({ children }) => {
         try {
             const result = await postService.getPosts(params);
             const fetchedPosts = result.posts || [];
-            
+
             const processedPosts = fetchedPosts.map(post => {
                 let authorData = { id: null, name: 'Unknown Author', avatar: 'https://i.pravatar.cc/150?u=default' };
                 if (post.author) {
@@ -45,8 +46,8 @@ export const AppProvider = ({ children }) => {
             });
             setPosts(processedPosts);
             return result;
-        } catch (error) { 
-            console.error("AuthContext: Error fetching posts:", error); 
+        } catch (error) {
+            console.error("AuthContext: Error fetching posts:", error);
             setPosts([]);
             return { posts: [], currentPage: 1, totalPages: 0, totalPosts: 0, hasMore: false };
         }
@@ -58,50 +59,50 @@ export const AppProvider = ({ children }) => {
             const mappedUsers = users.map(u => ({ ...u, id: u._id || u.id }));
             setAllUsers(mappedUsers);
             return mappedUsers;
-        } catch (error) { 
-            console.error("AuthContext: Error fetching users:", error); 
-            setAllUsers([]); 
-            return []; 
+        } catch (error) {
+            console.error("AuthContext: Error fetching users:", error);
+            setAllUsers([]);
+            return [];
         }
     };
 
-     useEffect(() => {
-         const initialize = async () => {
-             if (initializingRef.current) return;
-             initializingRef.current = true;
-             
-             setLoading(true);
-             const storedUser = sessionStorage.getItem('user');
-             const storedToken = sessionStorage.getItem('token');
-             let fetchedUsers = [];
-             
-             if (storedUser && storedToken) {
-                 try {
-                     const initialUser = JSON.parse(storedUser);
-                     setUser(initialUser);
-                     axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
-                     fetchedUsers = await fetchAllUsers();
-                 } catch (e) { 
-                     console.error("AuthContext: Error initializing user/users:", e); 
-                     sessionStorage.clear(); 
-                     setUser(null); 
-                     delete axios.defaults.headers.common['Authorization']; 
-                 }
-             }
-             
-             const storedTheme = localStorage.getItem('theme') || 'dark';
-             setTheme(storedTheme);
-             
-             try { 
-                 await fetchPosts(fetchedUsers); 
-             } catch (postError) { 
-                 console.error("AuthContext: Initial post fetch failed:", postError); 
-             }
-             
-             setLoading(false);
-         };
-         initialize();
-     }, []); // Empty dependency array - only run once on mount
+    useEffect(() => {
+        const initialize = async () => {
+            if (initializingRef.current) return;
+            initializingRef.current = true;
+
+            setLoading(true);
+            const storedUser = sessionStorage.getItem('user');
+            const storedToken = sessionStorage.getItem('token');
+            let fetchedUsers = [];
+
+            if (storedUser && storedToken) {
+                try {
+                    const initialUser = JSON.parse(storedUser);
+                    setUser(initialUser);
+                    axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
+                    fetchedUsers = await fetchAllUsers();
+                } catch (e) {
+                    console.error("AuthContext: Error initializing user/users:", e);
+                    sessionStorage.clear();
+                    setUser(null);
+                    delete axios.defaults.headers.common['Authorization'];
+                }
+            }
+
+            const storedTheme = localStorage.getItem('theme') || 'dark';
+            setTheme(storedTheme);
+
+            try {
+                await fetchPosts(fetchedUsers);
+            } catch (postError) {
+                console.error("AuthContext: Initial post fetch failed:", postError);
+            }
+
+            setLoading(false);
+        };
+        initialize();
+    }, []); // Empty dependency array - only run once on mount
 
     const updateUserAndStorage = (newUserData) => {
         setUser(prevUser => {
@@ -117,28 +118,28 @@ export const AppProvider = ({ children }) => {
         const postId = postData.id || postData._id;
         try {
             let savedPost;
-            if (isEditing && postId) { 
-                savedPost = await postService.updatePost(postId, postData); 
-            } else { 
-                savedPost = await postService.createPost(postData); 
+            if (isEditing && postId) {
+                savedPost = await postService.updatePost(postId, postData);
+            } else {
+                savedPost = await postService.createPost(postData);
             }
             await fetchPosts(allUsers);
             return savedPost;
-        } catch (error) { 
-            console.error("Failed to save post:", error); 
-            throw error; 
+        } catch (error) {
+            console.error("Failed to save post:", error);
+            throw error;
         }
     };
 
     const deletePost = async (postId) => {
-         try {
-             await postService.deletePost(postId);
-             await fetchPosts(allUsers);
-         } catch (error) {
-             console.error("Failed to delete post:", error);
-             throw error;
-         }
-     };
+        try {
+            await postService.deletePost(postId);
+            await fetchPosts(allUsers);
+        } catch (error) {
+            console.error("Failed to delete post:", error);
+            throw error;
+        }
+    };
 
     const updatePostState = (updatedPostData) => {
         const processedPost = {
@@ -176,10 +177,10 @@ export const AppProvider = ({ children }) => {
             await fetchPosts(users);
             setLoading(false);
             return { token, user: mappedUser };
-        } catch (error) { 
-            console.error("Login failed:", error); 
-            setLoading(false); 
-            throw error; 
+        } catch (error) {
+            console.error("Login failed:", error);
+            setLoading(false);
+            throw error;
         }
     };
 
@@ -196,10 +197,10 @@ export const AppProvider = ({ children }) => {
             await fetchPosts(users);
             setLoading(false);
             return { token, user: mappedUser };
-        } catch (error) { 
-            console.error("Registration failed:", error); 
-            setLoading(false); 
-            throw error; 
+        } catch (error) {
+            console.error("Registration failed:", error);
+            setLoading(false);
+            throw error;
         }
     };
 

@@ -27,12 +27,11 @@ export default function DashboardPage() {
 
     const [confirmModalOpen, setConfirmModalOpen] = useState(false);
     const [confirmAction, setConfirmAction] = useState(null);
-    const [confirmData, setConfirmData] = useState(null); 
     const [confirmMessage, setConfirmMessage] = useState('');
 
     useEffect(() => {
         if (!contextLoading && currentUser && posts.length === 0) {
-            console.log("Dashboard attempting initial post fetch...");
+
             fetchPosts().catch(err => console.error("Dashboard initial fetch failed:", err));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -63,15 +62,14 @@ export default function DashboardPage() {
         if (!text || !currentUser || !blogId) {
             console.error("handleComment: Missing data", { text, currentUser, blogId });
             return;
-        };
-        console.log(`Attempting to add comment '${text}' to post ${blogId}`);
+        }
+
         try {
             await commentService.addComment(blogId, text);
-            console.log(`Comment added via service for post ${blogId}`);
+
 
             const refreshedPost = await postService.getPostById(blogId);
             if (refreshedPost) {
-                console.log(`Refreshed post ${blogId} after comment:`, refreshedPost);
                 updatePostState(refreshedPost);
             } else {
                 console.warn(`Post ${blogId} not found after adding comment. Refetching all.`);
@@ -112,11 +110,10 @@ export default function DashboardPage() {
 
     const handleDelete = (blogId) => {
         setConfirmMessage('Are you sure you want to delete this post? This action cannot be undone.');
-        setConfirmData(blogId); 
         setConfirmAction(() => async () => {
             try {
                 await deletePostFromContext(blogId);
-                console.log(`Post ${blogId} deleted.`);
+
             } catch (error) {
                 console.error("Failed to delete post:", error.response?.data?.message || error.message);
                 alert(`Failed to delete post: ${error.response?.data?.message || 'Please try again.'}`);
@@ -127,17 +124,15 @@ export default function DashboardPage() {
 
     const handleConfirm = async () => {
         if (typeof confirmAction === 'function') {
-            await confirmAction(); 
+            await confirmAction();
         }
-        setConfirmModalOpen(false); 
+        setConfirmModalOpen(false);
         setConfirmAction(null);
-        setConfirmData(null);
     };
 
     const handleCancelConfirm = () => {
         setConfirmModalOpen(false);
         setConfirmAction(null);
-        setConfirmData(null);
     };
 
     const handleBlogSubmit = async (blogData) => {
@@ -146,13 +141,13 @@ export default function DashboardPage() {
     };
 
     const handleProfileUpdate = (updatedProfile) => {
-        console.log("Updating profile in Dashboard context:", updatedProfile);
+
         setCurrentUser(updatedProfile);
         closeModal();
     };
 
-    const handleFollow = (userId) => {
-        console.log("Follow action triggered for user:", userId);
+    const handleFollow = () => {
+
     };
 
     const closeModal = () => setModalContent(null);
@@ -166,26 +161,25 @@ export default function DashboardPage() {
 
     const navigateToProfile = (userToNav) => {
         closeModal();
-        console.log("navigateToProfile called with:", userToNav);
-        
+
+
         // Extract user ID - handle both string and ObjectId
         let userId = userToNav?.id || userToNav?._id;
-        
+
         // Convert ObjectId to string if needed
         if (userId && typeof userId === 'object' && userId.toString) {
             userId = userId.toString();
         }
-        
+
         // Also handle if the entire userToNav is just an ID string
         if (typeof userToNav === 'string') {
             userId = userToNav;
         }
-        
-        console.log("Extracted ID:", userId, "Type:", typeof userId);
-        
+
+
+
         if (userId && (typeof userId === 'string' || typeof userId === 'number')) {
             const finalId = String(userId);
-            console.log("Navigating to:", `/profile/${finalId}`);
             navigate(`/profile/${finalId}`);
         } else {
             console.error("Cannot navigate: Invalid user object or could not extract ID.", userToNav);
@@ -215,7 +209,7 @@ export default function DashboardPage() {
                 style={{ backgroundImage: `url(${dashboardBgUrl})` }}
                 aria-hidden="true"
             />
-            <div className="relative z-0"> 
+            <div className="relative z-0">
                 <DashboardView
                     blogs={feedPosts}
                     currentUser={currentUser}
@@ -255,7 +249,7 @@ export default function DashboardPage() {
                     title="Confirm Deletion"
                     message={confirmMessage}
                     confirmText="Delete"
-                />                
+                />
             </div>
         </div>
     );

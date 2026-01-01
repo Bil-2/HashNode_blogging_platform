@@ -1,11 +1,12 @@
+
 import React from 'react';
 import BlogPost from '../components/post/BlogPost';
 import ProfileCard from '../components/profile/ProfileCard';
 import { NewPostCard, SearchCard, TrendingCard, SuggestionsCard } from '../components/dashboard/SidebarComponents';
 
-const DashboardView = ({ blogs = [], currentUser, allUsers = [], visibleBlogs, setVisibleBlogs, handleLike, 
-    handleComment, handleDelete, openModal, navigateTo, onFollow, onUpdateComment, onDeleteComment }) => {
-    
+const DashboardView = ({ blogs = [], currentUser, allUsers = [], visibleBlogs, setVisibleBlogs, handleLike,
+    handleComment, handleDelete, openModal, navigateTo, onUpdateComment, onDeleteComment }) => {
+
     if (!currentUser) {
         return (
             <main className="container mx-auto p-4 md:px-6 pt-28">

@@ -3,7 +3,7 @@ import BlogPost from '../components/post/BlogPost';
 import ProfileCard from '../components/profile/ProfileCard';
 import { NewPostCard, SearchCard, TrendingCard, SuggestionsCard } from '../components/dashboard/SidebarComponents';
 
-const SinglePostView = ({ blog, blogs, currentUser, allUsers, handleLike, handleComment, handleDelete, openModal, navigateTo, onFollow }) => (
+const SinglePostView = ({ blog, blogs, currentUser, allUsers, handleLike, handleComment, handleDelete, openModal, navigateTo }) => (
     <main className="container mx-auto p-4 md:px-6 pt-24">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <aside className="hidden lg:block lg:col-span-1">

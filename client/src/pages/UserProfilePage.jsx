@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAppContext } from '../hooks/useAuth';
@@ -11,7 +11,7 @@ import Spinner from '../components/common/Spinner';
 
 const UserProfilePage = () => {
     const { userId } = useParams();
-    const { user: loggedInUser, setUser: setLoggedInUser, allUsers: contextAllUsers, fetchPosts, updatePostState, deletePost: deletePostFromContext } = useAppContext();
+    const { user: loggedInUser, setUser: setLoggedInUser, allUsers: contextAllUsers } = useAppContext();
     const navigate = useNavigate();
 
     const [profileToDisplay, setProfileToDisplay] = useState(null);
@@ -21,11 +21,10 @@ const UserProfilePage = () => {
     const [modalContent, setModalContent] = useState(null);
     const [confirmModalOpen, setConfirmModalOpen] = useState(false);
     const [confirmAction, setConfirmAction] = useState(null);
-    const [confirmData, setConfirmData] = useState(null);
     const [confirmMessage, setConfirmMessage] = useState('');
     const [isFollowingProcessing, setIsFollowingProcessing] = useState(false);
 
-    const fetchUserPosts = async (profileId) => {
+    const fetchUserPosts = useCallback(async (profileId) => {
         const token = sessionStorage.getItem('token');
         if (!token || !profileId) return;
         try {
@@ -38,39 +37,38 @@ const UserProfilePage = () => {
             console.error(`Error fetching posts for user ${profileId}:`, err);
             setError(err.response?.data?.message || 'Failed to load posts.');
         }
-    };
+    }, [loggedInUser?._id]);
 
     useEffect(() => {
         const fetchUserProfileAndPosts = async () => {
             if (!userId) { setError("No user ID provided in URL."); setLoading(false); return; }
-            
+
             // Check if user is authenticated by checking sessionStorage token
             const token = sessionStorage.getItem('token');
-            if (!loggedInUser || !token) { 
-                setError("Login required to view profiles."); 
-                setLoading(false); 
-                return; 
+            if (!loggedInUser || !token) {
+                setError("Login required to view profiles.");
+                setLoading(false);
+                return;
             }
-            
+
             setLoading(true);
             setError(null);
             setUserBlogs([]);
             setProfileToDisplay(null);
-            
-            console.log("UserProfilePage - Fetching profile for userId:", userId);
-            console.log("UserProfilePage - userId type:", typeof userId);
-            
+
+
+
             try {
                 const token = sessionStorage.getItem('token');
                 const config = { headers: { Authorization: `Bearer ${token}` } };
                 const apiUrl = `/users/${userId}`;  // Don't add /api - it's already in axios baseURL
-                
-                console.log("UserProfilePage - Making request to:", apiUrl);
-                
+
+
+
                 const { data: profileData } = await axios.get(apiUrl, config);
-                
-                console.log("UserProfilePage - Received profile data:", profileData);
-                
+
+
+
                 if (profileData?._id) {
                     setProfileToDisplay(profileData);
                     await fetchUserPosts(profileData._id);
@@ -82,9 +80,9 @@ const UserProfilePage = () => {
                 console.error("Error response:", err.response);
                 console.error("Error status:", err.response?.status);
                 console.error("Error data:", err.response?.data);
-                
-                const message = err.response?.status === 404 
-                    ? `User not found. (ID: ${userId})` 
+
+                const message = err.response?.status === 404
+                    ? `User not found. (ID: ${userId})`
                     : (err.response?.data?.message || err.message || 'Failed to load profile.');
                 setError(message);
             } finally {
@@ -92,28 +90,28 @@ const UserProfilePage = () => {
             }
         };
         fetchUserProfileAndPosts();
-    }, [userId, loggedInUser?.token]);
+    }, [userId, loggedInUser, loggedInUser?.token, fetchUserPosts]);
 
     const closeModal = () => setModalContent(null);
     const openModal = (type, data) => {
-         let modalData = { ...data }; 
+        let modalData = { ...data };
 
-         if (type === 'search') {
-             modalData = { ...data, allUsers: contextAllUsers || [], blogs: userBlogs || [] };
-         }
-         else if (type === 'likers' && Array.isArray(data)) {
-             const likerIds = data.map(like => typeof like === 'string' ? like : (like._id || like.id)).filter(Boolean);
-             const resolvedLikers = Array.isArray(contextAllUsers) ? contextAllUsers.filter(u => likerIds.includes(u._id || u.id)) : [];
-             modalData = resolvedLikers; 
-         }
-         else if ((type === 'followers' || type === 'following') && data && Array.isArray(data.list)) {
+        if (type === 'search') {
+            modalData = { ...data, allUsers: contextAllUsers || [], blogs: userBlogs || [] };
+        }
+        else if (type === 'likers' && Array.isArray(data)) {
+            const likerIds = data.map(like => typeof like === 'string' ? like : (like._id || like.id)).filter(Boolean);
+            const resolvedLikers = Array.isArray(contextAllUsers) ? contextAllUsers.filter(u => likerIds.includes(u._id || u.id)) : [];
+            modalData = resolvedLikers;
+        }
+        else if ((type === 'followers' || type === 'following') && data && Array.isArray(data.list)) {
             const userIds = data.list.map(item => typeof item === 'string' ? item : (item._id || item.id)).filter(Boolean);
             const resolvedUserList = Array.isArray(contextAllUsers) ? contextAllUsers.filter(u => userIds.includes(u._id || u.id)) : [];
             modalData = { ...data, list: resolvedUserList };
-         }
+        }
 
-         setModalContent({ type, data: modalData });
-     };
+        setModalContent({ type, data: modalData });
+    };
 
     const handleProfileUpdate = async (updatedData) => {
         if (!loggedInUser || loggedInUser._id !== userId) return;
@@ -137,7 +135,9 @@ const UserProfilePage = () => {
         try {
             const token = sessionStorage.getItem('token');
             const config = { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } };
-            const { id, _id, ...payload } = blogData;
+            const payload = { ...blogData };
+            delete payload.id;
+            delete payload._id;
             if (isEditing && postId) { await axios.put(`/posts/${postId}`, payload, config); }
             else { await axios.post('/posts', payload, config); }
             if (profileToDisplay?._id) { await fetchUserPosts(profileToDisplay._id); }
@@ -150,8 +150,7 @@ const UserProfilePage = () => {
 
     const handleDelete = (blogId) => {
         setConfirmMessage('Are you sure you want to delete this post? This action cannot be undone.');
-        setConfirmData(blogId);
-        setConfirmAction(() => async () => { 
+        setConfirmAction(() => async () => {
             try {
                 const token = sessionStorage.getItem('token');
                 const config = { headers: { Authorization: `Bearer ${token}` } };
@@ -168,17 +167,17 @@ const UserProfilePage = () => {
 
     const handleConfirm = async () => {
         if (typeof confirmAction === 'function') {
-            await confirmAction(); 
+            await confirmAction();
         }
-        setConfirmModalOpen(false); 
+        setConfirmModalOpen(false);
         setConfirmAction(null);
-        setConfirmData(null);
+
     };
 
     const handleCancelConfirm = () => {
         setConfirmModalOpen(false);
         setConfirmAction(null);
-        setConfirmData(null);
+
     };
 
     const handleFollow = async (idToToggle) => {
@@ -204,7 +203,7 @@ const UserProfilePage = () => {
             setIsFollowingProcessing(false);
         }
     };
-    
+
 
     if (loading) { return <div className="flex justify-center items-center min-h-screen"><Spinner /></div>; }
     if (error && !profileToDisplay) { return <div className="pt-24 text-center text-red-500 text-lg">{error}</div>; }
@@ -214,53 +213,53 @@ const UserProfilePage = () => {
     const coverPhotoUrl = profileToDisplay.coverPhoto || `https://placehold.net/7-600x800.png`;
 
     return (<div className="relative min-h-screen isolate">
-            <div
-                className="fixed inset-0 -z-10 bg-cover bg-center opacity-15"
-                style={{ backgroundImage: `url(${coverPhotoUrl})` }}
-                aria-hidden="true"
-            />
-            <div className="relative z-0">
-                <UserProfileView
-                    profile={profileToDisplay}
-                    blogs={userBlogs}
-                    currentUser={loggedInUser}
-                    onFollow={handleFollow}
-                    allUsers={contextAllUsers}
-                    openModal={openModal}
-                    onDeletePost={handleDelete}
-                    postError={postLoadingError}
-                    isFollowingProcessing={isFollowingProcessing}
-                />
-            </div>
-            {modalContent && (
-                <Modal onClose={closeModal} title={modalContent.type.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())} size={modalContent.type === 'createPost' || modalContent.type === 'editProfile' ? 'xl' : 'md'}>
-                    <ModalContent
-                        type={modalContent.type}
-                        data={modalContent.data}
-                        onSaveBlog={handleBlogSubmit}
-                        onSaveProfile={handleProfileUpdate}
-                        onClose={closeModal}
-                        currentUser={loggedInUser}
-                        onFollow={handleFollow}
-                        onProfileClick={(user) => {
-                            const navUserId = user._id || user.id;
-                            if (navUserId) { navigate(`/profile/${navUserId}`) }
-                            else { console.error("ModalContent: Cannot navigate, user ID missing", user) }
-                        }}
-                        allUsers={contextAllUsers}
-                        openModal={openModal}
-                    />
-                </Modal>
-            )}
-            <ConfirmationModal
-                isOpen={confirmModalOpen}
-                onClose={handleCancelConfirm}
-                onConfirm={handleConfirm}
-                title="Confirm Deletion"
-                message={confirmMessage}
-                confirmText="Delete"
+        <div
+            className="fixed inset-0 -z-10 bg-cover bg-center opacity-15"
+            style={{ backgroundImage: `url(${coverPhotoUrl})` }}
+            aria-hidden="true"
+        />
+        <div className="relative z-0">
+            <UserProfileView
+                profile={profileToDisplay}
+                blogs={userBlogs}
+                currentUser={loggedInUser}
+                onFollow={handleFollow}
+                allUsers={contextAllUsers}
+                openModal={openModal}
+                onDeletePost={handleDelete}
+                postError={postLoadingError}
+                isFollowingProcessing={isFollowingProcessing}
             />
         </div>
+        {modalContent && (
+            <Modal onClose={closeModal} title={modalContent.type.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())} size={modalContent.type === 'createPost' || modalContent.type === 'editProfile' ? 'xl' : 'md'}>
+                <ModalContent
+                    type={modalContent.type}
+                    data={modalContent.data}
+                    onSaveBlog={handleBlogSubmit}
+                    onSaveProfile={handleProfileUpdate}
+                    onClose={closeModal}
+                    currentUser={loggedInUser}
+                    onFollow={handleFollow}
+                    onProfileClick={(user) => {
+                        const navUserId = user._id || user.id;
+                        if (navUserId) { navigate(`/profile/${navUserId}`) }
+                        else { console.error("ModalContent: Cannot navigate, user ID missing", user) }
+                    }}
+                    allUsers={contextAllUsers}
+                    openModal={openModal}
+                />
+            </Modal>
+        )}
+        <ConfirmationModal
+            isOpen={confirmModalOpen}
+            onClose={handleCancelConfirm}
+            onConfirm={handleConfirm}
+            title="Confirm Deletion"
+            message={confirmMessage}
+            confirmText="Delete"
+        />
+    </div>
     );
 };
 

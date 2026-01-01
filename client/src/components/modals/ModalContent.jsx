@@ -6,7 +6,7 @@ import BlogEditor from '../post/BlogEditor';
 import SearchResults from './SearchResults';
 import BlogPostModal from './BlogPostModal';
 
-const ModalContent = ({ type, data, onSaveBlog, onSaveProfile, onClose, blogs, currentUser, onFollow, onProfileClick, allUsers, openModal }) => {
+const ModalContent = ({ type, data, onSaveBlog, onSaveProfile, onClose, currentUser, onFollow, onProfileClick, openModal }) => {
     switch (type) {
         case 'editProfile':
             return <ProfileEditForm user={data} onSave={onSaveProfile} onCancel={onClose} />;
@@ -25,7 +25,7 @@ const ModalContent = ({ type, data, onSaveBlog, onSaveProfile, onClose, blogs, c
             return <BlogPostModal blog={data} currentUser={currentUser} onEdit={(b) => { onClose(); openModal('createPost', b); }} />;
         default:
             console.warn("ModalContent received unknown type:", type);
-            return <p className="text-text-secondary">Content type not recognized.</p>; 
+            return <p className="text-text-secondary">Content type not recognized.</p>;
     }
 };
 

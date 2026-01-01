@@ -28,21 +28,21 @@ const ProfileEditForm = ({ user, onSave, onCancel }) => {
     const [coverPreview, setCoverPreview] = useState(user.coverPhoto || 'https://placehold.net/7-600x800.png');
     const [avatarFile, setAvatarFile] = useState(null);
     const [coverFile, setCoverFile] = useState(null);
-    const [isUploading, setIsUploading] = useState(false); 
+    const [isUploading, setIsUploading] = useState(false);
 
     const handleFileChange = (e, type) => {
         if (e.target.files && e.target.files[0]) {
             const file = e.target.files[0];
-            const fileUrl = URL.createObjectURL(file); 
+            const fileUrl = URL.createObjectURL(file);
 
             if (type === 'avatar') {
-                setAvatarPreview(fileUrl); 
-                setAvatarFile(file);     
+                setAvatarPreview(fileUrl);
+                setAvatarFile(file);
             } else {
                 setCoverPreview(fileUrl);
-                setCoverFile(file);       
+                setCoverFile(file);
             }
-            
+
         }
     };
 
@@ -58,7 +58,7 @@ const ProfileEditForm = ({ user, onSave, onCancel }) => {
             const uploadImage = async (file) => {
                 const formData = new FormData();
                 formData.append('image', file);
-                
+
                 const storedUser = JSON.parse(sessionStorage.getItem('user'));
                 const token = storedUser?.token;
 
@@ -101,11 +101,11 @@ const ProfileEditForm = ({ user, onSave, onCancel }) => {
             <InputField label="Name" name="name" value={profileData.name} onChange={handleChange} />
             <InputField label="Bio" name="bio" value={profileData.bio} onChange={handleChange} isTextarea />
             <InputField label="Website URL" name="website" value={profileData.website || ''} onChange={handleChange} placeholder="https://your-site.com" />
-            <InputField label="Twitter Username" name="twitter" value={profileData.twitter || ''} onChange={handleChange} placeholder="your username" />
+            <InputField label="X Username" name="twitter" value={profileData.twitter || ''} onChange={handleChange} placeholder="your username" />
             <InputField label="LinkedIn Username" name="linkedin" value={profileData.linkedin || ''} onChange={handleChange} placeholder="your username" />
             <div className="flex justify-end space-x-3 pt-4">
-                <button type="button" onClick={onCancel} className="px-4 py-2 rounded-full bg-white/20 hover:bg-white/30 font-semibold">Cancel</button>
-                <button type="submit" className="px-4 py-2 rounded-full bg-indigo-500 text-white hover:bg-indigo-600 font-semibold">Save Changes</button>
+                <button type="button" onClick={onCancel} disabled={isUploading} className="px-4 py-2 rounded-full bg-white/20 hover:bg-white/30 font-semibold disabled:opacity-50">Cancel</button>
+                <button type="submit" disabled={isUploading} className="px-4 py-2 rounded-full bg-indigo-500 text-white hover:bg-indigo-600 font-semibold disabled:opacity-50">{isUploading ? 'Saving...' : 'Save Changes'}</button>
             </div>
         </form>
     );

@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { ImageIcon } from '../common/Icons';
 import InputField from '../common/InputField';
-import Spinner from '../common/Spinner'; 
+import Spinner from '../common/Spinner';
 
 const BlogEditor = ({ blogToEdit, onSave, onCancel }) => {
     const isEditing = Boolean(blogToEdit?._id || blogToEdit?.id);
-    const originalStatus = blogToEdit?.status || 'published'; 
+    const originalStatus = blogToEdit?.status || 'published';
 
     const [title, setTitle] = useState(blogToEdit?.title || '');
     const [content, setContent] = useState(blogToEdit?.content || '');
@@ -58,10 +58,7 @@ const BlogEditor = ({ blogToEdit, onSave, onCancel }) => {
                 category: category,
             };
 
-            console.log('BlogEditor - Preparing post data:', postData);
-            console.log('BlogEditor - Category value:', category);
-            console.log('BlogEditor - Title length:', title.length);
-            console.log('BlogEditor - Content length:', content.length);
+
 
             switch (action) {
                 case 'draft':
@@ -81,7 +78,7 @@ const BlogEditor = ({ blogToEdit, onSave, onCancel }) => {
                 default:
                     if (action === 'publish' && isEditing && originalStatus === 'draft' && !scheduleDate) {
                         postData.status = 'published';
-                        postData.publishedAt = new Date(); 
+                        postData.publishedAt = new Date();
                         setScheduleDate('');
                     } else if (action === 'publish' && !isEditing && !scheduleDate) {
                         postData.status = 'published';
@@ -89,9 +86,9 @@ const BlogEditor = ({ blogToEdit, onSave, onCancel }) => {
                         setScheduleDate('');
                     }
                     else if (isEditing && action !== 'schedule') {
-                        postData.status = originalStatus; 
+                        postData.status = originalStatus;
                         postData.publishedAt = scheduleDate ? new Date(scheduleDate) : (blogToEdit?.publishedAt || null);
-                        if (scheduleDate) postData.status = 'scheduled'; 
+                        if (scheduleDate) postData.status = 'scheduled';
                     }
                     else {
                         postData.status = 'published';
@@ -101,7 +98,7 @@ const BlogEditor = ({ blogToEdit, onSave, onCancel }) => {
                     break;
             }
 
-            console.log('BlogEditor - Final post data being sent:', postData);
+
             onSave(postData);
 
         } catch (error) {
@@ -162,13 +159,13 @@ const BlogEditor = ({ blogToEdit, onSave, onCancel }) => {
                 </select>
             </div>
 
-            <InputField 
-                label="Content" 
-                name="content" 
-                value={content} 
-                onChange={(e) => setContent(e.target.value)} 
-                isTextarea 
-                placeholder="Write your story..." 
+            <InputField
+                label="Content"
+                name="content"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                isTextarea
+                placeholder="Write your story..."
                 minLength={10}
                 maxLength={50000}
                 showCount={true}

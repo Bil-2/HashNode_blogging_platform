@@ -3,7 +3,7 @@ import User from '../models/User.js';
 
 import Comment from '../models/Comment.js';
 import asyncHandler from 'express-async-handler';
-import mongoose from 'mongoose'; 
+import mongoose from 'mongoose';
 
 export const getPosts = asyncHandler(async (req, res) => {
   // Pagination
@@ -35,16 +35,16 @@ export const getPosts = asyncHandler(async (req, res) => {
 
   // Fetch posts
   const posts = await Post.find(query)
-    .populate('author', 'name avatar _id') 
-    .populate({ 
-        path: 'comments',
-        model: 'Comment',
-        populate: { 
-            path: 'user',
-            model: 'User',
-            select: 'name avatar _id'
-        },
-        options: { sort: { createdAt: -1 }, limit: 5 } // Limit comments per post
+    .populate('author', 'name avatar _id')
+    .populate({
+      path: 'comments',
+      model: 'Comment',
+      populate: {
+        path: 'user',
+        model: 'User',
+        select: 'name avatar _id'
+      },
+      options: { sort: { createdAt: -1 }, limit: 5 } // Limit comments per post
     })
     .sort({ publishedAt: -1 })
     .skip(skip)
@@ -62,49 +62,49 @@ export const getPosts = asyncHandler(async (req, res) => {
 
 export const getMyPosts = asyncHandler(async (req, res) => {
   const posts = await Post.find({ author: req.user._id })
-    .populate('author', 'name avatar _id') 
-    .populate({ 
-        path: 'comments',
-        model: 'Comment',
-        populate: { 
-            path: 'user',
-            model: 'User',
-            select: 'name avatar _id'
-        },
-        options: { sort: { createdAt: -1 } } 
+    .populate('author', 'name avatar _id')
+    .populate({
+      path: 'comments',
+      model: 'Comment',
+      populate: {
+        path: 'user',
+        model: 'User',
+        select: 'name avatar _id'
+      },
+      options: { sort: { createdAt: -1 } }
     })
     .sort({ createdAt: -1 });
   res.json(posts);
 });
 
 export const getPostById = asyncHandler(async (req, res) => {
-  
+
   if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-      res.status(404);
-      throw new Error('Post not found (Invalid ID)');
+    res.status(404);
+    throw new Error('Post not found (Invalid ID)');
   }
 
-  
+
   const post = await Post.findById(req.params.id)
-    .populate('author', 'name avatar _id') 
-    .populate({ 
-        path: 'comments',
-        populate: { 
-            path: 'user',
-            select: 'name avatar _id' 
-        },
-        options: { sort: { createdAt: -1 } } 
+    .populate('author', 'name avatar _id')
+    .populate({
+      path: 'comments',
+      populate: {
+        path: 'user',
+        select: 'name avatar _id'
+      },
+      options: { sort: { createdAt: -1 } }
     });
-  
+
 
   if (post) {
-    
+
     if (
       post.status !== 'published' &&
-      
+
       (!req.user || post.author._id.toString() !== req.user._id.toString())
     ) {
-      res.status(404); 
+      res.status(404);
       throw new Error('Post not found or not authorized');
     }
     res.json(post);
@@ -119,7 +119,7 @@ export const createPost = asyncHandler(async (req, res) => {
   const { title, content, imageUrl, category, status, publishedAt } = req.body;
 
   // Log incoming request for debugging
-  console.log('Creating post with data:', { title, content, category, status, imageUrl: imageUrl ? 'provided' : 'none' });
+
 
   if (!title || !content) {
     res.status(400);
@@ -128,12 +128,12 @@ export const createPost = asyncHandler(async (req, res) => {
 
   // Ensure category has a valid value
   const finalCategory = category && category.trim() !== '' ? category : 'Technology';
-  
+
   let finalPublishedAt;
   if (status === 'scheduled' && publishedAt) {
     finalPublishedAt = new Date(publishedAt);
   } else if (status === 'draft') {
-    finalPublishedAt = null; 
+    finalPublishedAt = null;
   } else {
     finalPublishedAt = new Date();
   }
@@ -145,21 +145,21 @@ export const createPost = asyncHandler(async (req, res) => {
     imageUrl: imageUrl || '',
     category: finalCategory,
     status: status || 'published',
-    publishedAt: finalPublishedAt, 
+    publishedAt: finalPublishedAt,
   });
 
   const createdPost = await post.save();
-  
+
   const populatedPost = await Post.findById(createdPost._id).populate('author', 'name avatar _id');
   res.status(201).json(populatedPost);
 });
 
 export const updatePostDetails = asyncHandler(async (req, res) => {
-   
-   if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-       res.status(404);
-       throw new Error('Post not found (Invalid ID)');
-   }
+
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    res.status(404);
+    throw new Error('Post not found (Invalid ID)');
+  }
   const { title, content, imageUrl, category, status, publishedAt } = req.body;
   const post = await Post.findById(req.params.id);
 
@@ -181,32 +181,32 @@ export const updatePostDetails = asyncHandler(async (req, res) => {
   const previousStatus = post.status;
   post.status = status !== undefined ? status : post.status;
 
-  
+
   if (status === 'scheduled' && publishedAt) {
-      post.publishedAt = new Date(publishedAt);
+    post.publishedAt = new Date(publishedAt);
   } else if (status === 'published' && previousStatus !== 'published') {
-      
-      post.publishedAt = post.publishedAt && post.publishedAt > new Date() ? post.publishedAt : new Date();
+
+    post.publishedAt = post.publishedAt && post.publishedAt > new Date() ? post.publishedAt : new Date();
   } else if (status === 'draft') {
-      post.publishedAt = null; 
+    post.publishedAt = null;
   } else if (publishedAt) {
-      
-      post.publishedAt = new Date(publishedAt);
+
+    post.publishedAt = new Date(publishedAt);
   }
 
 
   const updatedPost = await post.save();
-  
+
   const populatedPost = await Post.findById(updatedPost._id).populate('author', 'name avatar _id');
   res.json(populatedPost);
 });
 
 export const deletePost = asyncHandler(async (req, res) => {
-   
-   if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-       res.status(404);
-       throw new Error('Post not found (Invalid ID)');
-   }
+
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    res.status(404);
+    throw new Error('Post not found (Invalid ID)');
+  }
   const post = await Post.findById(req.params.id);
   if (!post) {
     res.status(404);
@@ -217,7 +217,7 @@ export const deletePost = asyncHandler(async (req, res) => {
     throw new Error('Not authorized');
   }
 
-  
+
   await Comment.deleteMany({ post: post._id });
 
   await post.deleteOne();
@@ -225,27 +225,27 @@ export const deletePost = asyncHandler(async (req, res) => {
 });
 
 export const getPostsByUser = asyncHandler(async (req, res) => {
-   
-   if (!mongoose.Types.ObjectId.isValid(req.params.userId)) {
-       res.status(404);
-       throw new Error('User not found (Invalid ID)');
-   }
+
+  if (!mongoose.Types.ObjectId.isValid(req.params.userId)) {
+    res.status(404);
+    throw new Error('User not found (Invalid ID)');
+  }
   const posts = await Post.find({
     author: req.params.userId,
     status: 'published',
     publishedAt: { $lte: new Date() },
   })
-    .populate('author', 'name avatar _id') 
+    .populate('author', 'name avatar _id')
     .sort({ publishedAt: -1 });
   res.json(posts);
 });
 
 export const likePost = asyncHandler(async (req, res) => {
-   
-   if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-       res.status(404);
-       throw new Error('Post not found (Invalid ID)');
-   }
+
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    res.status(404);
+    throw new Error('Post not found (Invalid ID)');
+  }
   const post = await Post.findById(req.params.id);
   if (!post) {
     res.status(404);
@@ -256,28 +256,28 @@ export const likePost = asyncHandler(async (req, res) => {
   const alreadyLiked = post.likes.some((like) => like.toString() === userIdString);
 
   if (alreadyLiked) {
-    
+
     post.likes = post.likes.filter((like) => like.toString() !== userIdString);
     await post.save();
-    
-    const updatedPost = await Post.findById(req.params.id).select('likes'); 
-    res.json({ likes: updatedPost.likes }); 
+
+    const updatedPost = await Post.findById(req.params.id).select('likes');
+    res.json({ likes: updatedPost.likes });
   } else {
-    
+
     post.likes.push(req.user._id);
     await post.save();
-    const updatedPost = await Post.findById(req.params.id).select('likes'); 
-    res.json({ likes: updatedPost.likes }); 
+    const updatedPost = await Post.findById(req.params.id).select('likes');
+    res.json({ likes: updatedPost.likes });
   }
 });
 
 
 export const unlikePost = asyncHandler(async (req, res) => {
-   
-   if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-       res.status(404);
-       throw new Error('Post not found (Invalid ID)');
-   }
+
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    res.status(404);
+    throw new Error('Post not found (Invalid ID)');
+  }
   const post = await Post.findById(req.params.id);
   if (!post) {
     res.status(404);
@@ -288,14 +288,14 @@ export const unlikePost = asyncHandler(async (req, res) => {
   const isLiked = post.likes.some((like) => like.toString() === userIdString);
 
   if (!isLiked) {
-     
-     const updatedPost = await Post.findById(req.params.id).select('likes'); 
-     res.json({ likes: updatedPost.likes }); 
+
+    const updatedPost = await Post.findById(req.params.id).select('likes');
+    res.json({ likes: updatedPost.likes });
   } else {
-    
+
     post.likes = post.likes.filter((like) => like.toString() !== userIdString);
     await post.save();
-    const updatedPost = await Post.findById(req.params.id).select('likes'); 
-    res.json({ likes: updatedPost.likes }); 
+    const updatedPost = await Post.findById(req.params.id).select('likes');
+    res.json({ likes: updatedPost.likes });
   }
 });
