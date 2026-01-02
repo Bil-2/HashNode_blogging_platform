@@ -8,9 +8,7 @@
     "client": "npm run dev --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "test": "node test-deployment.js",
-    "build": "npm install --prefix server --legacy-peer-deps",
-    "start": "npm start --prefix server",
-    "postinstall": "npm install --prefix server --legacy-peer-deps"
+    "test": "node test-deployment.js"
   },
   "keywords": [],
   "author": "",
