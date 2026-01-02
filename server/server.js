@@ -43,10 +43,11 @@ const authLimiter = rateLimit({
 // CORS configuration
 app.use(cors({
   origin: [
-    'https://hashnode-blogging-platform.vercel.app', // Replace with your actual Vercel URL
+    process.env.FRONTEND_URL, // Allow specific frontend URL from env
+    'https://hashnode-blogging-platform.vercel.app', // Fallback/Reference
     'http://localhost:3000',
     'http://localhost:5173'
-  ],
+  ].filter(Boolean), // Remove undefined values
   credentials: true
 }));
 
