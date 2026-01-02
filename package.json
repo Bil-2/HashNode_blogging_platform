@@ -9,7 +9,8 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "test": "node test-deployment.js",
     "build": "npm install --prefix server",
-    "start": "npm start --prefix server"
+    "start": "npm start --prefix server",
+    "postinstall": "npm install --prefix server"
   },
   "keywords": [],
   "author": "",
