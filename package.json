@@ -4,11 +4,13 @@
   "description": "HashNode - A modern blogging platform",
   "main": "index.js",
   "scripts": {
-  "server": "npm run dev --prefix server",
-  "client": "npm run dev --prefix client",
-  "dev": "concurrently \"npm run server\" \"npm run client\"",
-  "test": "node test-deployment.js"
-},
+    "server": "npm run dev --prefix server",
+    "client": "npm run dev --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "test": "node test-deployment.js",
+    "build": "npm install --prefix server",
+    "start": "npm start --prefix server"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
