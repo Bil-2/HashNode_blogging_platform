@@ -86,7 +86,7 @@ export const forgotPassword = asyncHandler(async (req, res) => {
   const resetToken = user.getResetPasswordToken();
   await user.save({ validateBeforeSave: false });
 
-  const resetUrl = `${process.env.CLIENT_URL || 'http://localhost:5173'}/reset-password/${resetToken}`;
+  const resetUrl = `${process.env.FRONTEND_URL || process.env.CLIENT_URL || 'http://localhost:5173'}/reset-password/${resetToken}`;
 
   const message = `
     You have requested a password reset.
@@ -157,14 +157,14 @@ export const googleAuthCallback = asyncHandler(async (req, res) => {
   const user = req.user;
 
   if (!user) {
-    return res.redirect(`${process.env.CLIENT_URL}/auth?error=authentication_failed`);
+    return res.redirect(`${process.env.FRONTEND_URL || process.env.CLIENT_URL}/auth?error=authentication_failed`);
   }
 
   // Generate JWT token
   const token = generateToken(user._id);
 
   // Redirect to frontend with token
-  res.redirect(`${process.env.CLIENT_URL}/auth/google/success?token=${token}&user=${encodeURIComponent(JSON.stringify({
+  res.redirect(`${process.env.FRONTEND_URL || process.env.CLIENT_URL}/auth/google/success?token=${token}&user=${encodeURIComponent(JSON.stringify({
     _id: user._id,
     name: user.name,
     email: user.email,
