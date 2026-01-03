@@ -105,10 +105,10 @@ const AuthPage = () => {
     useEffect(() => {
         if (location.state?.show === 'register') {
             setView('register');
-        } else if (location.pathname === '/auth' && view !== 'forgot') {
+        } else if (location.state?.show === 'login') {
             setView('login');
         }
-    }, [location.state, location.pathname, view]);
+    }, [location.state]);
 
     useEffect(() => {
         if (!loading && isAuthenticated) {
@@ -133,13 +133,13 @@ const AuthPage = () => {
                 style={{ backgroundImage: backgroundImageUrl }}
                 aria-hidden="true"
             />
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, ease: "easeOut" }} className="relative w-full max-w-4xl h-[600px] bg-white/5 backdrop-blur-lg rounded-2xl shadow-2xl border border-white/10 overflow-hidden" >
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, ease: "easeOut" }} className="relative w-full max-w-4xl min-h-[650px] md:h-[600px] bg-white/5 backdrop-blur-lg rounded-2xl shadow-2xl border border-white/10 overflow-hidden" >
                 <div className="w-full h-full relative overflow-hidden">
 
                     <motion.div
                         animate={{ x: view === 'login' ? '0%' : (isDesktop ? '100%' : '0%') }}
                         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                        className="absolute top-0 left-0 w-full md:w-1/2 h-full p-8 md:p-12 z-20 flex flex-col justify-center"
+                        className="absolute top-0 left-0 w-full md:w-1/2 h-full p-8 md:p-12 z-20 flex flex-col justify-center overflow-y-auto no-scrollbar"
                     >
                         <AnimatePresence mode="wait">
                             <motion.div
