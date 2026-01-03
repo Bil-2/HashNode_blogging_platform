@@ -11,9 +11,18 @@
 
 **A full-stack MERN blogging platform with stunning glassmorphism design**
 
-[Features](#-features) • [Demo](#-demo) • [Installation](#-installation) • [Usage](#-usage) • [API](#-api-documentation) • [Contributing](#-contributing)
+[Features](#-features) • [Demo](#-demo) • [Installation](#-installation) • [Usage](#-usage) • [API](#-api-documentation) • [Contributing](#-contributing) • [Live Link](#-live-link)
 
 </div>
+
+</div>
+
+---
+
+## 🚀 Live Link
+
+- **Frontend**: [https://hashnode-blogging-platform.vercel.app](https://hashnode-blogging-platform.vercel.app)
+- **Backend API**: [https://hashnode-blogging-platform.onrender.com](https://hashnode-blogging-platform.onrender.com)
 
 ---
 
