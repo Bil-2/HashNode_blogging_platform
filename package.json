@@ -8,7 +8,7 @@
     "client": "npm run dev --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "test": "node test-deployment.js",
-    "test": "node test-deployment.js"
+    "start": "npm start --prefix server"
   },
   "keywords": [],
   "author": "",
