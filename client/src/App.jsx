@@ -1,3 +1,4 @@
+// Trigger Vercel Redeploy
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { useAppContext } from './hooks/useAuth';
@@ -34,7 +35,7 @@ const PrivateRoute = ({ children }) => {
 const AppContent = () => {
     const { theme } = useAppContext();
     const location = useLocation();
-    
+
     const isSpecialLayout = location.pathname === '/auth' || location.pathname === '/';
 
     // Smooth scroll to top on route change
@@ -45,8 +46,8 @@ const AppContent = () => {
     useEffect(() => {
         const favicon = document.querySelector("link[rel='icon']");
         if (favicon) {
-            favicon.href = theme === 'dark' 
-                ? '/darkmode logo hashnode.png' 
+            favicon.href = theme === 'dark'
+                ? '/darkmode logo hashnode.png'
                 : '/lightmode logo hashnode.png';
         }
     }, [theme]);
@@ -62,7 +63,7 @@ const AppContent = () => {
                         <Route path="/auth" element={<AuthPage />} />
                         <Route path="/auth/google/success" element={<GoogleAuthSuccess />} />
                         <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
-                        
+
                         {/* Private Routes */}
                         <Route path="/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
                         <Route path="/profile/:userId" element={<PrivateRoute><UserProfilePage /></PrivateRoute>} />
