@@ -1,0 +1,66 @@
+name: Keep Render Server Alive
+
+on:
+  schedule:
+    # Ping every 12 minutes to prevent cold starts (Render free tier spins down after 15 min)
+    # 12 minutes provides optimal coverage with minimal API calls
+    - cron: '*/12 * * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    # Continue even if ping fails - prevents notification spam
+    continue-on-error: true
+    steps:
+      - name: Ping Server Endpoints
+        # Don't fail the workflow if curl fails
+        continue-on-error: true
+        run: |
+          echo "🚀 Starting server warmup..."
+          echo "⏰ Timestamp: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
+          
+          # Function to ping with retry logic
+          ping_endpoint() {
+            local url=$1
+            local max_retries=3
+            local retry=0
+            
+            while [ $retry -lt $max_retries ]; do
+              echo "📡 Attempting to ping: $url (attempt $((retry + 1))/$max_retries)"
+              response=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 "$url" || echo "000")
+              
+              if [ "$response" = "200" ]; then
+                echo "✅ Success! Response: $response"
+                return 0
+              else
+                echo "⚠️  Response: $response - Retrying..."
+                retry=$((retry + 1))
+                sleep 5
+              fi
+            done
+            
+            echo "❌ Failed after $max_retries attempts"
+            return 1
+          }
+          
+          # Ping both endpoints for comprehensive warmup
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "1️⃣  Pinging main server endpoint..."
+          ping_endpoint "https://hashnode-blogging-platform.onrender.com"
+          
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "2️⃣  Pinging warmup endpoint (server + database)..."
+          ping_endpoint "https://hashnode-blogging-platform.onrender.com/api/warmup"
+          
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "✨ Warmup cycle complete!"
+          echo "⏰ Completed at: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
+          
+          # Always exit 0 to prevent notification spam
+          exit 0
+
+

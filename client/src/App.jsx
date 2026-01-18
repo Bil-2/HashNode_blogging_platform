@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { useAppContext } from './hooks/useAuth';
+import useServerWarmup from './hooks/useServerWarmup';
 
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
@@ -35,6 +36,9 @@ const PrivateRoute = ({ children }) => {
 const AppContent = () => {
     const { theme } = useAppContext();
     const location = useLocation();
+
+    // Warm up server on initial load (production only)
+    useServerWarmup();
 
     const isSpecialLayout = location.pathname === '/auth' || location.pathname === '/';
 

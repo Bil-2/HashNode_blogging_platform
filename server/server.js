@@ -15,6 +15,7 @@ import categoryRoutes from './routes/categoryRoutes.js';
 import commentRoutes from './routes/commentRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
+import healthRoutes from './routes/healthRoutes.js';
 import { notFound, errorHandler } from './middleware/authMiddleware.js';
 import path from 'path';
 import cors from 'cors';
@@ -80,6 +81,10 @@ app.use(passport.session());
 // Apply stricter rate limiting to auth routes (DISABLED FOR TESTING)
 // app.use('/api/auth/login', authLimiter);
 // app.use('/api/auth/register', authLimiter);
+
+// Health check routes (mounted before auth to avoid rate limiting)
+app.use('/api', healthRoutes);
+
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/categories', categoryRoutes);
