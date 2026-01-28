@@ -21,8 +21,10 @@
 
 ## 🚀 Live Link
 
-- **Frontend**: [https://hashnode-blogging-platform.vercel.app](https://hashnode-blogging-platform.vercel.app)
+- **Frontend**: [Deploy to Netlify](https://app.netlify.com/start) - _Set `FRONTEND_URL` after deployment_
 - **Backend API**: [https://hashnode-blogging-platform.onrender.com](https://hashnode-blogging-platform.onrender.com)
+
+> **Note**: After deploying to Netlify, update the `FRONTEND_URL` environment variable in your backend (Render) with your Netlify deployment URL.
 
 ---
 
@@ -744,24 +746,42 @@ npm run lint     # Run ESLint
 
 ## 🚀 Deployment
 
-### Frontend (Netlify/Vercel)
+### Frontend (Netlify)
 
-1. Build the client:
+#### Option 1: Deploy via Netlify CLI
 
 ```bash
-cd client
-npm run build
+# Install Netlify CLI
+npm install -g netlify-cli
+
+# Login to Netlify
+netlify login
+
+# Deploy from project root
+netlify deploy --prod
 ```
 
-2. Deploy the `client/dist` folder to Netlify or Vercel
+#### Option 2: Deploy via Netlify Dashboard
 
-3. Set environment variables:
+1. Push your code to GitHub
+2. Go to [Netlify](https://app.netlify.com/) and click "Add new site"
+3. Connect your GitHub repository
+4. Netlify will auto-detect settings from `netlify.toml`
+5. Click "Deploy site"
+
+#### Environment Variables
+
+Set in Netlify dashboard under **Site settings → Environment variables**:
 
 ```
-VITE_API_BASE_URL=https://your-api-url.com/api
+VITE_API_BASE_URL=https://hashnode-blogging-platform.onrender.com/api
 ```
 
-4. Add `_redirects` file for SPA routing (already included)
+#### Post-Deployment
+
+- Copy your Netlify URL (e.g., `https://your-site-name.netlify.app`)
+- Update `FRONTEND_URL` in your backend (Render) environment variables
+- Update Google OAuth callback URLs if using Google login
 
 ### Backend (Heroku/Railway/Render)
 

@@ -45,8 +45,7 @@ const authLimiter = rateLimit({
 // CORS configuration
 app.use(cors({
   origin: [
-    process.env.FRONTEND_URL, // Allow specific frontend URL from env
-    'https://hashnode-blogging-platform.vercel.app', // Fallback/Reference
+    process.env.FRONTEND_URL, // Production Netlify URL (set in environment variables)
     'http://localhost:3000',
     'http://localhost:5173'
   ].filter(Boolean), // Remove undefined values
