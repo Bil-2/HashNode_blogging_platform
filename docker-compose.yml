@@ -1,0 +1,40 @@
+
+services:
+  # MongoDB Service
+  mongo:
+    image: mongo:latest
+    container_name: hashnode_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  # Backend Server Service
+  server:
+    build: ./server
+    container_name: hashnode_server
+    ports:
+      - "5001:5001"
+    environment:
+      - PORT=5001
+      - MONGO_URI=mongodb://mongo:27017/hashnode
+      - NODE_ENV=development
+      # Add other environment variables here or use an env_file
+      # - JWT_SECRET=your_secret
+      # - CLIENT_URL=http://localhost:5173
+    depends_on:
+      - mongo
+    links:
+      - mongo
+
+  # Frontend Client Service
+  client:
+    build: ./client
+    container_name: hashnode_client
+    ports:
+      - "5173:80" # Mapping port 80 inside container to 5173 on host
+    depends_on:
+      - server
+
+volumes:
+  mongo_data:
