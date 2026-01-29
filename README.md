@@ -21,10 +21,10 @@
 
 ## 🚀 Live Link
 
-- **Frontend**: [Deploy to Netlify](https://app.netlify.com/start) - _Set `FRONTEND_URL` after deployment_
+- **Frontend**: [https://hashnode-blogging-platform.netlify.app](https://hashnode-blogging-platform.netlify.app) ✨
 - **Backend API**: [https://hashnode-blogging-platform.onrender.com](https://hashnode-blogging-platform.onrender.com)
 
-> **Note**: After deploying to Netlify, update the `FRONTEND_URL` environment variable in your backend (Render) with your Netlify deployment URL.
+> **✅ Status**: Both frontend and backend are live and operational!
 
 ---
 
@@ -777,11 +777,13 @@ Set in Netlify dashboard under **Site settings → Environment variables**:
 VITE_API_BASE_URL=https://hashnode-blogging-platform.onrender.com/api
 ```
 
+> **✅ Already configured**: This environment variable is set in Netlify dashboard.
+
 #### Post-Deployment
 
-- Copy your Netlify URL (e.g., `https://your-site-name.netlify.app`)
-- Update `FRONTEND_URL` in your backend (Render) environment variables
-- Update Google OAuth callback URLs if using Google login
+- ✅ **Netlify URL**: `https://hashnode-blogging-platform.netlify.app`
+- ✅ `FRONTEND_URL` environment variable is set on Render
+- ✅ Google OAuth callback URLs configured (if using Google login)
 
 ### Backend (Heroku/Railway/Render)
 
