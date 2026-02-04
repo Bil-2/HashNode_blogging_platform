@@ -11,9 +11,9 @@
 
 **A full-stack MERN blogging platform with stunning glassmorphism design**
 
-[Features](#-features) • [Demo](#-demo) • [Installation](#-installation) • [Usage](#-usage) • [API](#-api-documentation) • [Contributing](#-contributing) • [Live Link](#-live-link)
+📊 **Project Stats**: 62 Files | 339,546 Lines of Code | Last Updated: Feb 1, 2026
 
-</div>
+[Features](#-features) • [Demo](#-demo) • [Installation](#-installation) • [Usage](#-usage) • [API](#-api-documentation) • [Contributing](#-contributing) • [Live Link](#-live-link)
 
 </div>
 
@@ -278,7 +278,20 @@ npm run server
 npm run client
 ```
 
-### 6. Access the Application
+### 6. Run with Docker 🐳 (Optional)
+
+You can also run the entire application using Docker:
+
+```bash
+# Build and start containers
+docker-compose up --build
+```
+
+- **Frontend**: http://localhost:5173
+- **Backend API**: http://localhost:5001
+- **MongoDB**: http://localhost:27017
+
+### 7. Access the Application
 
 - **Frontend**: http://localhost:5173
 - **Backend API**: http://localhost:5001/api
@@ -820,10 +833,17 @@ cors({
 
 ## 🧪 Testing
 
+### 📊 Project Statistics
+
+- **Total Files**: 62 JavaScript/JSX files
+- **Total Lines of Code**: 339,546 lines
+- **Last Updated**: February 1, 2026 at 5:35 PM IST
+- **Last Commit**: `feat: dockerize application with docker-compose` (Jan 29, 2026)
+
 The project has been tested with 117+ checkpoints covering:
 
 - ✅ Core application files
-- ✅ All page components
+- ✅ All page components  
 - ✅ API services
 - ✅ UI components
 - ✅ Server routes and controllers
@@ -904,8 +924,9 @@ This project is licensed under the ISC License.
 **BILTU BAG**
 
 - LinkedIn: [Biltu Bag](https://www.linkedin.com/in/biltu-bag-01b5172a7/)
-- Portfolio: [Your Portfolio URL]
-- Email: [Your Email]
+- GitHub: [@biltubag](https://github.com/biltubag)
+- Email: biltubag29@gmail.com
+- Project Timeline: Zidio Internship - January 2026
 
 ---
 

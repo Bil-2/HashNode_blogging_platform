@@ -52,10 +52,9 @@ const useServerWarmup = () => {
       }
     };
 
-    // Run warmup after a short delay to not block initial render
-    const timerId = setTimeout(warmupServer, 500);
-
-    return () => clearTimeout(timerId);
+    // Trigger warmup immediately on app load (no delay)
+    // This ensures fastest possible backend wake-up during cold starts
+    warmupServer();
   }, []);
 };
 

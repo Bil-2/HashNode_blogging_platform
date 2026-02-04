@@ -179,3 +179,18 @@ a, button, .transition-smooth {
     opacity: 1;
     transform: translateY(0);
 }
+
+/* Shimmer Animation for Skeleton Loading */
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.animate-shimmer {
+    animation: shimmer 2s ease-in-out infinite;
+}
+

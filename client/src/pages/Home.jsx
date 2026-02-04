@@ -5,6 +5,7 @@ import useIntersectionObserver from '../hooks/useIntersectionObserver';
 import { useParallax } from '../hooks/useScrollAnimation';
 import { postService } from '../api/postService';
 import PostCard from '../components/post/PostCard';
+import { SkeletonCardGrid } from '../components/common/SkeletonCard';
 import Spinner from '../components/common/Spinner';
 import Footer from '../components/layout/Footer';
 import { EditIcon, HeartIcon, UserIcon, CompassIcon, ImageIcon, CommentIcon } from '../components/common/Icons';
@@ -101,8 +102,8 @@ const RotatingTestimonials = () => {
                         <div
                             key={index}
                             className={`h-2 rounded-full transition-all duration-300 ${index === currentIndex
-                                    ? 'w-8 bg-indigo-500'
-                                    : 'w-2 bg-text-secondary/30'
+                                ? 'w-8 bg-indigo-500'
+                                : 'w-2 bg-text-secondary/30'
                                 }`}
                         />
                     ))}
@@ -307,9 +308,7 @@ const HomePage = () => {
 
                     {/* Blog Cards */}
                     {loading ? (
-                        <div className="flex justify-center py-20">
-                            <Spinner />
-                        </div>
+                        <SkeletonCardGrid count={3} />
                     ) : posts.length > 0 ? (
                         <>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">

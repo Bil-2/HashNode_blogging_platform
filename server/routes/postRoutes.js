@@ -11,24 +11,26 @@ import {
   getMyPosts,
 } from '../controllers/postController.js';
 import { protect, admin } from '../middleware/authMiddleware.js';
-import { 
-  validatePost, 
-  validateObjectId, 
-  validateUserId, 
-  validatePagination 
+import {
+  validatePost,
+  validateObjectId,
+  validateUserId,
+  validatePagination
 } from '../middleware/validators.js';
+import cacheMiddleware from '../middleware/cacheMiddleware.js';
 
 const router = express.Router();
 
-router.route('/').get(validatePagination, getPosts).post(protect, validatePost, createPost);
+// Cache public GET routes for 5 minutes to reduce database load
+router.route('/').get(cacheMiddleware(5 * 60 * 1000), validatePagination, getPosts).post(protect, validatePost, createPost);
 router.route('/myposts').get(protect, getMyPosts);
 
 router.route('/:id')
-  .get(validateObjectId, getPostById)
+  .get(cacheMiddleware(5 * 60 * 1000), validateObjectId, getPostById)
   .put(protect, validateObjectId, validatePost, updatePostDetails)
   .delete(protect, validateObjectId, deletePost);
 
-router.route('/user/:userId').get(validateUserId, getPostsByUser);
+router.route('/user/:userId').get(cacheMiddleware(5 * 60 * 1000), validateUserId, getPostsByUser);
 router.route('/:id/like').put(protect, validateObjectId, likePost);
 router.route('/:id/unlike').put(protect, validateObjectId, unlikePost);
 

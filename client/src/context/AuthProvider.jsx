@@ -67,6 +67,7 @@ export const AppProvider = ({ children }) => {
     };
 
     useEffect(() => {
+        // Optimized initialization - defer heavy data loading
         const initialize = async () => {
             if (initializingRef.current) return;
             initializingRef.current = true;
@@ -74,31 +75,29 @@ export const AppProvider = ({ children }) => {
             setLoading(true);
             const storedUser = sessionStorage.getItem('user');
             const storedToken = sessionStorage.getItem('token');
-            let fetchedUsers = [];
 
+            // Only restore user state if logged in, don't fetch data yet
             if (storedUser && storedToken) {
                 try {
                     const initialUser = JSON.parse(storedUser);
                     setUser(initialUser);
                     axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
-                    fetchedUsers = await fetchAllUsers();
+
+                    // Defer heavy data fetching - will be loaded on-demand
+                    // This prevents blocking the initial render
                 } catch (e) {
-                    console.error("AuthContext: Error initializing user/users:", e);
+                    console.error("AuthContext: Error initializing user:", e);
                     sessionStorage.clear();
                     setUser(null);
                     delete axios.defaults.headers.common['Authorization'];
                 }
             }
 
+            // Set theme immediately (lightweight operation)
             const storedTheme = localStorage.getItem('theme') || 'dark';
             setTheme(storedTheme);
 
-            try {
-                await fetchPosts(fetchedUsers);
-            } catch (postError) {
-                console.error("AuthContext: Initial post fetch failed:", postError);
-            }
-
+            // Allow UI to render immediately
             setLoading(false);
         };
         initialize();
