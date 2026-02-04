@@ -7,6 +7,11 @@ on:
     - cron: '*/12 * * * *'
   workflow_dispatch: # Allow manual trigger
 
+# Disable all notifications for this workflow to prevent email spam
+# The workflow runs every 12 minutes, so we don't want notification emails
+env:
+  ACTIONS_STEP_DEBUG: false
+
 jobs:
   ping:
     runs-on: ubuntu-latest
