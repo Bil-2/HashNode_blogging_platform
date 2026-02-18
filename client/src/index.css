@@ -52,7 +52,8 @@ body {
     scrollbar-color: #4f46e5 rgba(13, 27, 42, 0.5);
 }
 
-:root, .dark {
+:root,
+.dark {
     --background: #0D1B2A;
     --text-primary: #E0E1DD;
     --text-secondary: #b0b3b8;
@@ -61,6 +62,7 @@ body {
     --accent: #4f46e5;
     --accent-hover: #4338ca;
 }
+
 .light {
     --background: #f3f4f6;
     --text-primary: #1f2937;
@@ -71,17 +73,53 @@ body {
     --accent-hover: #6366f1;
 }
 
-.bg-background { background-color: var(--background); }
-.text-text-primary { color: var(--text-primary); }
-.text-text-secondary { color: var(--text-secondary); }
-.bg-glass { background-color: var(--glass-bg); }
-.border-glass { border-color: var(--glass-border); }
-.text-accent { color: var(--accent); }
+.bg-background {
+    background-color: var(--background);
+}
 
-.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 { color: var(--text-primary) !important; }
-.prose p, .prose ul, .prose ol, .prose li { color: var(--text-secondary) !important; }
-.prose a { color: var(--accent) !important; }
-.prose strong { color: var(--text-primary) !important; }
+.text-text-primary {
+    color: var(--text-primary);
+}
+
+.text-text-secondary {
+    color: var(--text-secondary);
+}
+
+.bg-glass {
+    background-color: var(--glass-bg);
+}
+
+.border-glass {
+    border-color: var(--glass-border);
+}
+
+.text-accent {
+    color: var(--accent);
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+    color: var(--text-primary) !important;
+}
+
+.prose p,
+.prose ul,
+.prose ol,
+.prose li {
+    color: var(--text-secondary) !important;
+}
+
+.prose a {
+    color: var(--accent) !important;
+}
+
+.prose strong {
+    color: var(--text-primary) !important;
+}
 
 
 /* Staggered Testimonial Animation */
@@ -90,6 +128,7 @@ body {
         opacity: 0;
         transform: translateY(30px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -108,7 +147,9 @@ body {
 }
 
 /* Smooth transitions for all interactive elements */
-a, button, .transition-smooth {
+a,
+button,
+.transition-smooth {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -123,7 +164,9 @@ a, button, .transition-smooth {
 
 /* Pulsing animation for live indicator */
 @keyframes ping {
-    75%, 100% {
+
+    75%,
+    100% {
         transform: scale(2);
         opacity: 0;
     }
@@ -148,6 +191,7 @@ a, button, .transition-smooth {
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -156,9 +200,12 @@ a, button, .transition-smooth {
 
 /* Floating Animation */
 @keyframes float {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translateY(0px);
     }
+
     50% {
         transform: translateY(-10px);
     }
@@ -185,6 +232,7 @@ a, button, .transition-smooth {
     0% {
         background-position: -200% 0;
     }
+
     100% {
         background-position: 200% 0;
     }
@@ -193,4 +241,3 @@ a, button, .transition-smooth {
 .animate-shimmer {
     animation: shimmer 2s ease-in-out infinite;
 }
-
