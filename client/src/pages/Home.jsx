@@ -154,6 +154,7 @@ const HomePage = () => {
     const navigate = useNavigate();
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [videoLoaded, setVideoLoaded] = useState(false);
     const parallaxOffset = useParallax(0.3);
 
     useEffect(() => {
@@ -163,7 +164,12 @@ const HomePage = () => {
             setPosts(result.posts || []);
             setLoading(false);
         };
-        fetchPosts();
+        // Defer API call until browser is idle so the UI paints first
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(fetchPosts, { timeout: 2000 });
+        } else {
+            setTimeout(fetchPosts, 100);
+        }
     }, []);
 
     const categories = ["Tech", "Travel", "Lifestyle", "Finance", "Health", "Food"];
@@ -172,13 +178,30 @@ const HomePage = () => {
         <>
             {/* Hero Section */}
             <div className="relative h-[100vh] overflow-hidden scroll-snap-section">
+                {/* Instant CSS gradient — shows immediately while video loads */}
+                <div
+                    className="absolute top-0 left-0 w-full h-full z-0"
+                    style={{
+                        background: 'linear-gradient(135deg, #0D1B2A 0%, #1a1040 25%, #0d2a4a 50%, #1a0d40 75%, #0D1B2A 100%)',
+                        backgroundSize: '400% 400%',
+                        animation: 'heroGradient 12s ease infinite',
+                        transition: 'opacity 1s ease',
+                        opacity: videoLoaded ? 0 : 0.85,
+                    }}
+                />
+                {/* Video fades in after it loads — keeps the visual effect without blocking initial render */}
                 <video
                     autoPlay
                     loop
                     muted
                     playsInline
-                    className="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-20"
-                    style={{ transform: `translateY(${parallaxOffset}px)` }}
+                    onCanPlay={() => setVideoLoaded(true)}
+                    className="absolute top-0 left-0 w-full h-full object-cover z-0"
+                    style={{
+                        transform: `translateY(${parallaxOffset}px)`,
+                        opacity: videoLoaded ? 0.20 : 0,
+                        transition: 'opacity 1.5s ease',
+                    }}
                 >
                     <source src="https://cdn.pixabay.com/video/2024/03/26/205691-927672681_large.mp4" type="video/mp4" />
                 </video>
