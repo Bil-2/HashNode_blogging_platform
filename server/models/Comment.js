@@ -11,5 +11,8 @@ const commentSchema = mongoose.Schema(
   }
 );
 
+// Add index to optimize fetching comments for a specific post and sorting by date
+commentSchema.index({ post: 1, createdAt: -1 });
+
 const Comment = mongoose.model('Comment', commentSchema);
 export default Comment;
