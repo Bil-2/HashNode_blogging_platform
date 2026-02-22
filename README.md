@@ -22,7 +22,7 @@
 ## 🚀 Live Link
 
 - **Frontend**: [https://hashnode-blogging-platform.netlify.app](https://hashnode-blogging-platform.netlify.app) ✨
-- **Backend API**: [https://hashnode-blogging-platform.onrender.com](https://hashnode-blogging-platform.onrender.com)
+- **Backend API**: [https://server-alpha-rust-24.vercel.app](https://server-alpha-rust-24.vercel.app)
 
 > **✅ Status**: Both frontend and backend are live and operational!
 
@@ -787,7 +787,7 @@ netlify deploy --prod
 Set in Netlify dashboard under **Site settings → Environment variables**:
 
 ```
-VITE_API_BASE_URL=https://hashnode-blogging-platform.onrender.com/api
+VITE_API_BASE_URL=https://server-alpha-rust-24.vercel.app/api
 ```
 
 > **✅ Already configured**: This environment variable is set in Netlify dashboard.
@@ -795,10 +795,10 @@ VITE_API_BASE_URL=https://hashnode-blogging-platform.onrender.com/api
 #### Post-Deployment
 
 - ✅ **Netlify URL**: `https://hashnode-blogging-platform.netlify.app`
-- ✅ `FRONTEND_URL` environment variable is set on Render
+- ✅ `FRONTEND_URL` environment variable is set on Vercel
 - ✅ Google OAuth callback URLs configured (if using Google login)
 
-### Backend (Heroku/Railway/Render)
+### Backend (Heroku/Railway/Vercel)
 
 1. Set environment variables in your hosting platform
 

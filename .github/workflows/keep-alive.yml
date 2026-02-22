@@ -1,14 +1,12 @@
-name: Keep Render Server Alive
+name: Keep Vercel Server Alive
 
 on:
   schedule:
-    # Ping every 12 minutes to prevent cold starts (Render free tier spins down after 15 min)
-    # 12 minutes provides optimal coverage with minimal API calls
+    # Ping every 12 minutes to keep the backend warm
     - cron: '*/12 * * * *'
   workflow_dispatch: # Allow manual trigger
 
 # Disable all notifications for this workflow to prevent email spam
-# The workflow runs every 12 minutes, so we don't want notification emails
 env:
   ACTIONS_STEP_DEBUG: false
 
@@ -49,16 +47,16 @@ jobs:
             return 1
           }
           
-          # Ping both endpoints for comprehensive warmup
+          # Ping Vercel backend endpoints
           echo ""
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo "1️⃣  Pinging main server endpoint..."
-          ping_endpoint "https://hashnode-blogging-platform.onrender.com"
+          ping_endpoint "https://server-alpha-rust-24.vercel.app"
           
           echo ""
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo "2️⃣  Pinging warmup endpoint (server + database)..."
-          ping_endpoint "https://hashnode-blogging-platform.onrender.com/api/warmup"
+          ping_endpoint "https://server-alpha-rust-24.vercel.app/api/warmup"
           
           echo ""
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -67,5 +65,3 @@ jobs:
           
           # Always exit 0 to prevent notification spam
           exit 0
-
-

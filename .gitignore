@@ -13,11 +13,5 @@ build/
 # Ignore VS Code settings (optional)
 .vscode/
 
-
 # Local Netlify folder
 .netlify
-
-# Ignore local database and logs
-data/
-*.log
-
