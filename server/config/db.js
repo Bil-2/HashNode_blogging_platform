@@ -1,40 +1,40 @@
 import mongoose from 'mongoose';
 
+// Cache the connection for serverless warm reuse
+let cached = global.mongoose;
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
+
 const connectDB = async () => {
-  try {
-    // Optimized connection options for cold starts and serverless environments
-    const conn = await mongoose.connect(process.env.MONGO_URI, {
-      maxPoolSize: 10, // Maximum number of connections in the pool
-      minPoolSize: 2,  // Minimum number of connections to maintain
-      serverSelectionTimeoutMS: 5000, // Timeout for initial server selection (5s)
-      socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
-      family: 4, // Use IPv4, skip trying IPv6
-      retryWrites: true,
-      w: 'majority'
-    });
-
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
-
-    // Handle connection events
-    mongoose.connection.on('error', (err) => {
-      console.error(`MongoDB connection error: ${err}`);
-    });
-
-    mongoose.connection.on('disconnected', () => {
-      console.log('MongoDB disconnected');
-    });
-
-    // Graceful shutdown
-    process.on('SIGINT', async () => {
-      await mongoose.connection.close();
-      console.log('MongoDB connection closed through app termination');
-      process.exit(0);
-    });
-
-  } catch (error) {
-    console.error(`Error: ${error.message}`);
-    process.exit(1); // Exit with a non-zero status code to indicate an error
+  // Return cached connection if already connected
+  if (cached.conn) {
+    return cached.conn;
   }
+
+  if (!cached.promise) {
+    cached.promise = mongoose.connect(process.env.MONGO_URI, {
+      maxPoolSize: 10,
+      serverSelectionTimeoutMS: 10000,
+      socketTimeoutMS: 45000,
+      family: 4,
+      retryWrites: true,
+      w: 'majority',
+    }).then((mongooseInstance) => {
+      console.log(`MongoDB Connected: ${mongooseInstance.connection.host}`);
+      return mongooseInstance;
+    });
+  }
+
+  try {
+    cached.conn = await cached.promise;
+  } catch (error) {
+    cached.promise = null; // reset so next request retries
+    console.error(`MongoDB connection error: ${error.message}`);
+    throw error; // Let the handler deal with it — never call process.exit() in serverless
+  }
+
+  return cached.conn;
 };
 
 export default connectDB;

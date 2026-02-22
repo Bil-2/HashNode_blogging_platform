@@ -4,6 +4,7 @@ import rateLimit from 'express-rate-limit';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import passport from 'passport';
+import mongoose from 'mongoose';
 
 dotenv.config();
 
@@ -20,8 +21,9 @@ import { notFound, errorHandler } from './middleware/authMiddleware.js';
 import path from 'path';
 import cors from 'cors';
 
-connectDB();
-configurePassport(); // Initialize Passport
+// Lazy DB connection middleware — required for Vercel serverless
+// connectDB() is NOT called at top-level, it runs on the first request
+configurePassport(); // Initialize Passport strategies
 
 const app = express();
 
@@ -43,37 +45,59 @@ const authLimiter = rateLimit({
 });
 
 // CORS configuration
-app.use(cors({
+const corsOptions = {
   origin: [
-    process.env.FRONTEND_URL, // Production Netlify URL (set in environment variables)
+    process.env.FRONTEND_URL,
     'http://localhost:3000',
     'http://localhost:5173'
-  ].filter(Boolean), // Remove undefined values
+  ].filter(Boolean),
   credentials: true
-}));
+};
+
+app.use(cors(corsOptions));
+
+// Explicitly handle preflight for ALL routes BEFORE any DB middleware
+// Express v5 requires '/{*wildcard}' instead of bare '*'
+app.options('/{*wildcard}', cors(corsOptions));
 
 app.use(express.json());
 
-// Session configuration (required for Passport)
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || 'your-secret-key',
-    resave: false,
-    saveUninitialized: false,
-    store: MongoStore.create({
-      mongoUrl: process.env.MONGO_URI,
-      touchAfter: 24 * 3600, // Lazy session update (update only once per 24 hours)
-    }),
-    cookie: {
-      secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
-      maxAge: 24 * 60 * 60 * 1000, // 24 hours
-    },
-  })
-);
+// Lazy DB + session middleware for Vercel serverless
+// MongoStore uses the existing mongoose connection — no second connection attempt
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
 
-// Initialize Passport
-app.use(passport.initialize());
-app.use(passport.session());
+    // Session using the already-connected mongoose connection (not a new mongoUrl connection)
+    session({
+      secret: process.env.SESSION_SECRET || 'your-secret-key',
+      resave: false,
+      saveUninitialized: false,
+      store: MongoStore.create({
+        client: mongoose.connection.getClient(),
+        touchAfter: 24 * 3600,
+      }),
+      cookie: {
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 24 * 60 * 60 * 1000,
+      },
+    })(req, res, () => {
+      passport.initialize()(req, res, () => {
+        passport.session()(req, res, next);
+      });
+    });
+  } catch (err) {
+    console.error('DB connection failed:', err.message);
+    // Manually set CORS header on error responses so browser doesn't block them
+    const origin = req.headers.origin;
+    if (corsOptions.origin.includes(origin)) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+      res.setHeader('Access-Control-Allow-Credentials', 'true');
+    }
+    res.status(503).json({ message: 'Database unavailable, try again shortly.' });
+  }
+});
+
 
 // Apply rate limiting to all API routes (DISABLED FOR TESTING)
 // app.use('/api/', limiter);
@@ -91,8 +115,8 @@ app.use('/api/comments', commentRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/upload', uploadRoutes);
 
-const __dirname = path.resolve();
-app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
+// Note: /uploads static serving removed — Vercel serverless has no persistent filesystem
+// Images are served via Cloudinary URLs stored in the database
 
 app.get('/', (req, res) => {
   res.send('API is running...');
@@ -101,7 +125,13 @@ app.get('/', (req, res) => {
 app.use(notFound);
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
-});
+// Export for Vercel serverless (production)
+// In development, start the server normally
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+  });
+}
+
+export default app;
