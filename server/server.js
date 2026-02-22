@@ -1,10 +1,10 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import rateLimit from 'express-rate-limit';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import passport from 'passport';
 import mongoose from 'mongoose';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -18,96 +18,80 @@ import userRoutes from './routes/userRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import healthRoutes from './routes/healthRoutes.js';
 import { notFound, errorHandler } from './middleware/authMiddleware.js';
-import path from 'path';
-import cors from 'cors';
 
-// Lazy DB connection middleware — required for Vercel serverless
-// connectDB() is NOT called at top-level, it runs on the first request
-configurePassport(); // Initialize Passport strategies
+// Initialize Passport strategies (safe at module level — no DB calls)
+configurePassport();
 
 const app = express();
 
-// Rate limiting configuration
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-  message: 'Too many requests from this IP, please try again later.',
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-
-const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Increased for testing - change back to 5 in production
-  message: 'Too many authentication attempts, please try again later.',
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-
-// CORS configuration
+// ─── CORS ────────────────────────────────────────────────────────────────────
 const corsOptions = {
   origin: [
-    process.env.FRONTEND_URL,
+    process.env.FRONTEND_URL,   // https://hashnode-blogging-platform.netlify.app
     'http://localhost:3000',
-    'http://localhost:5173'
+    'http://localhost:5173',
   ].filter(Boolean),
-  credentials: true
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
-
-// Explicitly handle preflight for ALL routes BEFORE any DB middleware
-// Express v5 requires '/{*wildcard}' instead of bare '*'
+// Express v5: must use '/{*wildcard}' not bare '*' for catch-all OPTIONS
 app.options('/{*wildcard}', cors(corsOptions));
 
 app.use(express.json());
 
-// Lazy DB + session middleware for Vercel serverless
-// MongoStore uses the existing mongoose connection — no second connection attempt
+// ─── LAZY DB + SESSION (cached) ──────────────────────────────────────────────
+// In Vercel serverless: connectDB uses a global cached connection.
+// The session middleware + MongoStore are created ONCE and reused across requests.
+let sessionMiddleware = null;
+
+const buildSessionMiddleware = () => {
+  if (sessionMiddleware) return sessionMiddleware;
+
+  sessionMiddleware = session({
+    secret: process.env.SESSION_SECRET || 'your-secret-key',
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+      // Reuse the existing mongoose connection — no second DB connection
+      client: mongoose.connection.getClient(),
+      touchAfter: 24 * 3600,
+    }),
+    cookie: {
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    },
+  });
+
+  return sessionMiddleware;
+};
+
 app.use(async (req, res, next) => {
   try {
     await connectDB();
 
-    // Session using the already-connected mongoose connection (not a new mongoUrl connection)
-    session({
-      secret: process.env.SESSION_SECRET || 'your-secret-key',
-      resave: false,
-      saveUninitialized: false,
-      store: MongoStore.create({
-        client: mongoose.connection.getClient(),
-        touchAfter: 24 * 3600,
-      }),
-      cookie: {
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: 24 * 60 * 60 * 1000,
-      },
-    })(req, res, () => {
+    // Build session middleware once, reuse for all subsequent requests
+    const sess = buildSessionMiddleware();
+    sess(req, res, () => {
       passport.initialize()(req, res, () => {
         passport.session()(req, res, next);
       });
     });
   } catch (err) {
     console.error('DB connection failed:', err.message);
-    // Manually set CORS header on error responses so browser doesn't block them
+    // Always send CORS headers even on errors so the browser doesn't block them
     const origin = req.headers.origin;
-    if (corsOptions.origin.includes(origin)) {
+    if (origin && corsOptions.origin.includes(origin)) {
       res.setHeader('Access-Control-Allow-Origin', origin);
       res.setHeader('Access-Control-Allow-Credentials', 'true');
     }
-    res.status(503).json({ message: 'Database unavailable, try again shortly.' });
+    return res.status(503).json({ message: 'Database unavailable, try again shortly.' });
   }
 });
 
-
-// Apply rate limiting to all API routes (DISABLED FOR TESTING)
-// app.use('/api/', limiter);
-// Apply stricter rate limiting to auth routes (DISABLED FOR TESTING)
-// app.use('/api/auth/login', authLimiter);
-// app.use('/api/auth/register', authLimiter);
-
-// Health check routes (mounted before auth to avoid rate limiting)
+// ─── ROUTES ──────────────────────────────────────────────────────────────────
 app.use('/api', healthRoutes);
-
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/categories', categoryRoutes);
@@ -115,20 +99,18 @@ app.use('/api/comments', commentRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/upload', uploadRoutes);
 
-// Note: /uploads static serving removed — Vercel serverless has no persistent filesystem
-// Images are served via Cloudinary URLs stored in the database
-
 app.get('/', (req, res) => {
-  res.send('API is running...');
+  res.json({ message: 'HashNode API is running', status: 'ok' });
 });
 
 app.use(notFound);
 app.use(errorHandler);
 
-// Export for Vercel serverless (production)
-// In development, start the server normally
+// ─── SERVER START ─────────────────────────────────────────────────────────────
+// In production (Vercel): export the app as a serverless function
+// In development: start a normal HTTP server
 if (process.env.NODE_ENV !== 'production') {
-  const PORT = process.env.PORT || 5000;
+  const PORT = process.env.PORT || 5001;
   app.listen(PORT, () => {
     console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
   });
