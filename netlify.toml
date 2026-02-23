@@ -1,18 +1,24 @@
 # Netlify Configuration for HashNode Blogging Platform
 
 [build]
-  # Build command
-  command = "npm run build"
+  # Build command (installs backend+frontend dependencies, then builds frontend)
+  command = "npm install && npm install --prefix client && npm run build --prefix client && npm install --prefix server"
   
   # Publish directory (Vite default output)
-  publish = "dist"
+  publish = "client/dist"
   
-  # Base directory for the build
-  base = "client"
+[functions]
+  node_bundler = "esbuild"
 
 [build.environment]
   # Node version
   NODE_VERSION = "18"
+
+# Redirect rules for API routes -> Netlify Functions
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
 
 # Redirect rules for SPA routing
 [[redirects]]
