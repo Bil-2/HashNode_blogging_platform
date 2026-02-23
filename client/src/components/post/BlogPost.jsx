@@ -13,7 +13,8 @@ const BlogPost = ({ blog, currentUser, onLike, onComment, onEdit, onDelete, onSh
     const [isSavingEdit, setIsSavingEdit] = useState(false);
 
     const [confirmDeleteModalOpen, setConfirmDeleteModalOpen] = useState(false);
-    const [commentToDelete, setCommentToDelete] = useState(null); 
+    const [commentToDelete, setCommentToDelete] = useState(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     if (!blog || !currentUser) {
         console.warn("BlogPost rendered without blog or currentUser:", { blog, currentUser });
@@ -56,16 +57,18 @@ const BlogPost = ({ blog, currentUser, onLike, onComment, onEdit, onDelete, onSh
     };
 
     const handleDeleteClick = (comment) => {
-        setCommentToDelete(comment); 
+        setCommentToDelete(comment);
         setConfirmDeleteModalOpen(true);
     };
 
     const handleConfirmDelete = async () => {
         if (commentToDelete && blogIdForActions) {
+            setIsDeleting(true);
             const commentId = commentToDelete.id || commentToDelete._id;
-            await onDeleteComment(commentId, blogIdForActions); 
+            await onDeleteComment(commentId, blogIdForActions);
+            setIsDeleting(false);
         }
-        setConfirmDeleteModalOpen(false); 
+        setConfirmDeleteModalOpen(false);
         setCommentToDelete(null);
     };
 
@@ -91,7 +94,7 @@ const BlogPost = ({ blog, currentUser, onLike, onComment, onEdit, onDelete, onSh
         setIsSavingEdit(true);
         try {
             await onUpdateComment(editingCommentId, blogIdForActions, editingCommentText);
-            cancelEditing(); 
+            cancelEditing();
         } catch (error) {
             console.error("Error saving comment edit:", error);
         } finally {
@@ -217,7 +220,7 @@ const BlogPost = ({ blog, currentUser, onLike, onComment, onEdit, onDelete, onSh
                                                             className="p-1 rounded bg-red-600/50 hover:bg-red-600/80 text-white"
                                                             aria-label="Delete comment"
                                                         >
-                                                            <TrashIcon className="w-3 h-3" /> 
+                                                            <TrashIcon className="w-3 h-3" />
                                                         </button>
                                                     </div>
                                                 )}
@@ -254,6 +257,7 @@ const BlogPost = ({ blog, currentUser, onLike, onComment, onEdit, onDelete, onSh
                 title="Confirm Comment Deletion"
                 message="Are you sure you want to delete this comment?"
                 confirmText="Delete"
+                isLoading={isDeleting}
             />
         </div>
     );

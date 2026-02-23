@@ -7,13 +7,14 @@ import {
   validatePasswordReset
 } from '../middleware/validators.js';
 import passport from 'passport';
+import { authLimiter } from '../middleware/rateLimitMiddleware.js';
 
 const router = express.Router();
 
-router.post('/register', validateRegistration, registerUser);
-router.post('/login', validateLogin, loginUser);
-router.post('/forgotpassword', validateEmail, forgotPassword);
-router.put('/resetpassword/:token', validatePasswordReset, resetPassword);
+router.post('/register', authLimiter, validateRegistration, registerUser);
+router.post('/login', authLimiter, validateLogin, loginUser);
+router.post('/forgotpassword', authLimiter, validateEmail, forgotPassword);
+router.put('/resetpassword/:token', authLimiter, validatePasswordReset, resetPassword);
 
 // Google OAuth routes
 router.get(

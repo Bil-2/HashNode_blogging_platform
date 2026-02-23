@@ -17,7 +17,7 @@ export const commentService = {
     addComment: async (postId, text) => {
         const config = getAuthConfig();
         try {
-            const { data } = await axios.post('/comments', { postId, text }, config);
+            const { data } = await axios.post('comments', { postId, text }, config);
             return {
                 ...data,
                 id: data._id,
@@ -34,7 +34,7 @@ export const commentService = {
 
     getComments: async (postId) => {
         try {
-            const { data } = await axios.get(`/comments/${postId}`);
+            const { data } = await axios.get(`comments/${postId}`);
             return data.map(comment => ({
                 ...comment,
                 id: comment._id,
@@ -51,9 +51,9 @@ export const commentService = {
     },
 
     updateComment: async (commentId, text) => {
-        const config = getAuthConfig(); 
+        const config = getAuthConfig();
         try {
-            const { data} = await axios.put(`/comments/${commentId}`, { text }, config);
+            const { data } = await axios.put(`comments/${commentId}`, { text }, config);
             return {
                 ...data,
                 id: data._id,
@@ -71,8 +71,8 @@ export const commentService = {
     deleteComment: async (commentId) => {
         const config = getAuthConfig();
         try {
-            const { data } = await axios.delete(`/comments/${commentId}`, config);
-            return data; 
+            const { data } = await axios.delete(`comments/${commentId}`, config);
+            return data;
         } catch (error) {
             console.error(`commentService.deleteComment: Failed for comment ${commentId}:`, error.response?.data || error.message);
             throw error;

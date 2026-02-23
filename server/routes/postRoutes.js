@@ -10,7 +10,7 @@ import {
   unlikePost,
   getMyPosts,
 } from '../controllers/postController.js';
-import { protect, admin } from '../middleware/authMiddleware.js';
+import { protect, admin, optionalAuth } from '../middleware/authMiddleware.js';
 import {
   validatePost,
   validateObjectId,
@@ -22,11 +22,11 @@ import cacheMiddleware from '../middleware/cacheMiddleware.js';
 const router = express.Router();
 
 // Cache public GET routes for 5 minutes to reduce database load
-router.route('/').get(cacheMiddleware(5 * 60 * 1000), validatePagination, getPosts).post(protect, validatePost, createPost);
+router.route('/').get(optionalAuth, cacheMiddleware(5 * 60 * 1000), validatePagination, getPosts).post(protect, validatePost, createPost);
 router.route('/myposts').get(protect, getMyPosts);
 
 router.route('/:id')
-  .get(cacheMiddleware(5 * 60 * 1000), validateObjectId, getPostById)
+  .get(optionalAuth, cacheMiddleware(5 * 60 * 1000), validateObjectId, getPostById)
   .put(protect, validateObjectId, validatePost, updatePostDetails)
   .delete(protect, validateObjectId, deletePost);
 

@@ -24,7 +24,7 @@ export const postService = {
                 ...(category && { category })
             });
 
-            const { data } = await axios.get(`/posts?${queryParams}`);
+            const { data } = await axios.get(`posts?${queryParams}`);
 
             // Handle new paginated response format
             if (data.posts) {
@@ -77,7 +77,7 @@ export const postService = {
         const config = getAuthConfig();
         if (!config) return null;
         try {
-            const { data } = await axios.get(`/posts/${id}`, config);
+            const { data } = await axios.get(`posts/${id}`, config);
 
 
             const postResult = {
@@ -115,7 +115,7 @@ export const postService = {
 
 
         try {
-            const { data } = await axios.post('/posts', payload, config);
+            const { data } = await axios.post('posts', payload, config);
             return {
                 ...data,
                 id: data._id,
@@ -142,7 +142,7 @@ export const postService = {
         delete payload.id;
         delete payload._id;
         try {
-            const { data } = await axios.put(`/posts/${postId}`, payload, config);
+            const { data } = await axios.put(`posts/${postId}`, payload, config);
             return {
                 ...data,
                 id: data._id,
@@ -164,7 +164,7 @@ export const postService = {
         const config = getAuthConfig();
         if (!config) throw new Error("Authentication required");
         try {
-            await axios.delete(`/posts/${postId}`, config);
+            await axios.delete(`posts/${postId}`, config);
             return { message: 'Post deleted successfully' };
         } catch (error) {
             console.error(`Failed to delete post ${postId}:`, error.response?.data?.message || error.message);
@@ -176,7 +176,7 @@ export const postService = {
         const config = getAuthConfig();
         if (!config) throw new Error("Authentication required");
         try {
-            const { data } = await axios.put(`/posts/${postId}/like`, {}, config);
+            const { data } = await axios.put(`posts/${postId}/like`, {}, config);
             return data;
         } catch (error) {
             console.error(`Failed to like post ${postId}:`, error.response?.data?.message || error.message);
@@ -188,7 +188,7 @@ export const postService = {
         const config = getAuthConfig();
         if (!config) throw new Error("Authentication required");
         try {
-            const { data } = await axios.put(`/posts/${postId}/unlike`, {}, config);
+            const { data } = await axios.put(`posts/${postId}/unlike`, {}, config);
             return data;
         } catch (error) {
             console.error(`Failed to unlike post ${postId}:`, error.response?.data?.message || error.message);

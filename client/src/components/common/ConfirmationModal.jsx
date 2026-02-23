@@ -1,8 +1,8 @@
 import React from 'react';
-import Modal from './Modal'; 
-import Button from './Button'; 
+import Modal from './Modal';
+import Button from './Button';
 
-const ConfirmationModal = ({ isOpen, onClose, onConfirm, title = "Confirm Action", message = "Are you sure you want to proceed?", confirmText = "Confirm", cancelText = "Cancel" }) => {
+const ConfirmationModal = ({ isOpen, onClose, onConfirm, title = "Confirm Action", message = "Are you sure you want to proceed?", confirmText = "Confirm", cancelText = "Cancel", isLoading = false }) => {
     if (!isOpen) {
         return null;
     }
@@ -15,13 +15,15 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, title = "Confirm Action
                     <button
                         type="button"
                         onClick={onClose}
-                        className="px-4 py-2 rounded-full bg-white/20 hover:bg-white/30 font-semibold text-text-primary transition-colors"
+                        disabled={isLoading}
+                        className={`px-4 py-2 rounded-full bg-white/20 hover:bg-white/30 font-semibold text-text-primary transition-colors ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
                         {cancelText}
                     </button>
-                    <Button 
+                    <Button
                         onClick={onConfirm}
-                        className="bg-red-600 hover:bg-red-700 focus:ring-red-500" 
+                        isLoading={isLoading}
+                        className="bg-red-600 hover:bg-red-700 focus:ring-red-500"
                     >
                         {confirmText}
                     </Button>

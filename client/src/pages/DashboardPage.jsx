@@ -28,6 +28,7 @@ export default function DashboardPage() {
     const [confirmModalOpen, setConfirmModalOpen] = useState(false);
     const [confirmAction, setConfirmAction] = useState(null);
     const [confirmMessage, setConfirmMessage] = useState('');
+    const [isConfirming, setIsConfirming] = useState(false);
 
     useEffect(() => {
         if (!contextLoading && currentUser && posts.length === 0) {
@@ -124,7 +125,9 @@ export default function DashboardPage() {
 
     const handleConfirm = async () => {
         if (typeof confirmAction === 'function') {
+            setIsConfirming(true);
             await confirmAction();
+            setIsConfirming(false);
         }
         setConfirmModalOpen(false);
         setConfirmAction(null);
@@ -249,6 +252,7 @@ export default function DashboardPage() {
                     title="Confirm Deletion"
                     message={confirmMessage}
                     confirmText="Delete"
+                    isLoading={isConfirming}
                 />
             </div>
         </div>

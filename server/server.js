@@ -18,6 +18,7 @@ import userRoutes from './routes/userRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import healthRoutes from './routes/healthRoutes.js';
 import { notFound, errorHandler } from './middleware/authMiddleware.js';
+import { apiLimiter } from './middleware/rateLimitMiddleware.js';
 
 // Initialize Passport strategies (safe at module level — no DB calls)
 configurePassport();
@@ -91,7 +92,8 @@ app.use(async (req, res, next) => {
 });
 
 // ─── ROUTES ──────────────────────────────────────────────────────────────────
-app.use('/api', healthRoutes);
+app.use('/api/', apiLimiter);
+app.use('/api/health', healthRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/categories', categoryRoutes);
