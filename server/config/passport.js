@@ -19,12 +19,16 @@ export const configurePassport = () => {
   });
 
   // Google OAuth Strategy
+  const serverUrl = process.env.NODE_ENV === 'production'
+    ? 'https://hashnode-blogging-platform.netlify.app'
+    : `http://localhost:${process.env.PORT || 5001}`;
+
   passport.use(
     new GoogleStrategy(
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: process.env.GOOGLE_CALLBACK_URL || 'https://hashnode-blogging-platform.netlify.app/api/auth/google/callback',
+        callbackURL: `${serverUrl}/api/auth/google/callback`,
         passReqToCallback: true,
         scope: ['profile', 'email']
       },

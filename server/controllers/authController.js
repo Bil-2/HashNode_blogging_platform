@@ -163,8 +163,11 @@ export const googleAuthCallback = asyncHandler(async (req, res) => {
   // Generate JWT token
   const token = generateToken(user._id);
 
+  // Determine the correct frontend URL
+  const frontendUrl = process.env.CLIENT_URL || process.env.FRONTEND_URL || 'https://hashnode-blogging-platform.netlify.app';
+
   // Redirect to frontend with token
-  res.redirect(`${process.env.FRONTEND_URL || process.env.CLIENT_URL}/auth/google/success?token=${token}&user=${encodeURIComponent(JSON.stringify({
+  res.redirect(`${frontendUrl}/auth/google/success?token=${token}&user=${encodeURIComponent(JSON.stringify({
     _id: user._id,
     name: user.name,
     email: user.email,

@@ -30,7 +30,7 @@ router.get(
 router.get(
   '/google/callback',
   passport.authenticate('google', {
-    failureRedirect: `${process.env.CLIENT_URL}/auth?error=google_auth_failed`,
+    failureRedirect: `${process.env.CLIENT_URL || process.env.FRONTEND_URL || 'https://hashnode-blogging-platform.netlify.app'}/auth?error=google_auth_failed`,
     session: false
   }),
   googleAuthCallback
