@@ -25,8 +25,10 @@ export const configurePassport = () => {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         callbackURL: process.env.GOOGLE_CALLBACK_URL || 'https://hashnode-blogging-platform.netlify.app/api/auth/google/callback',
+        passReqToCallback: true,
+        scope: ['profile', 'email']
       },
-      async (accessToken, refreshToken, profile, done) => {
+      async (req, accessToken, refreshToken, profile, done) => {
         try {
           // Check if user already exists with this Google ID
           let user = await User.findOne({ googleId: profile.id });
