@@ -1,6 +1,7 @@
 [build]
-  # Install root deps (serverless-http lives here), then client & server deps, then build frontend
-  command = "npm install && npm install --prefix server && npm install --prefix client && npm run build --prefix client"
+  # --production=false on the client install ensures Vite (a devDep) is always installed
+  # even when NODE_ENV=production. Without it, vite: command not found.
+  command = "npm install && npm install --prefix server && npm install --prefix client --production=false && npm run build --prefix client"
   publish = "client/dist"
   functions = "netlify/functions"
 
@@ -10,9 +11,6 @@
 
 [build.environment]
   NODE_VERSION = "18"
-  # Force npm install to include devDependencies even when NODE_ENV=production.
-  # Without this, Vite (a devDependency) is skipped and the frontend build fails.
-  NPM_FLAGS = "--production=false"
 
 # Redirect rules for API routes -> Netlify Functions
 # NOTE: No :splat in the target — this preserves event.path as the original
