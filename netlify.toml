@@ -9,8 +9,10 @@
   included_files = ["server/**"]
 
 [build.environment]
-  # Node version
   NODE_VERSION = "18"
+  # Force npm install to include devDependencies even when NODE_ENV=production.
+  # Without this, Vite (a devDependency) is skipped and the frontend build fails.
+  NPM_FLAGS = "--production=false"
 
 # Redirect rules for API routes -> Netlify Functions
 # NOTE: No :splat in the target — this preserves event.path as the original
