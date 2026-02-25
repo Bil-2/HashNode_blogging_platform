@@ -1,7 +1,17 @@
 import serverless from 'serverless-http';
 import app from '../../server/server.js';
 
-// netlify.toml rewrites /api/* → /.netlify/functions/api/:splat
-// Netlify already passes the full path (e.g. /api/auth/login) in event.path.
-// Express expects exactly that — so we pass it through with no transformation.
-export const handler = serverless(app);
+// How the Netlify redirect works:
+//   netlify.toml: /api/* → /.netlify/functions/api  (no :splat)
+//   This preserves the original request path inside event.rawPath and event.path.
+//   Express sees /api/auth/login and correctly matches its routes.
+//
+// The extra rawPath handler below is a safety net — event.rawPath is ALWAYS
+// the original browser request path, even if Netlify's internal routing changes.
+export const handler = serverless(app, {
+  request(req, event) {
+    // event.rawPath = original browser path, e.g. /api/auth/login
+    // event.path   = same when :splat is NOT used in the redirect target
+    req.url = event.rawPath || event.path;
+  }
+});

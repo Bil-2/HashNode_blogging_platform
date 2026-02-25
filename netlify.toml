@@ -13,9 +13,11 @@
   NODE_VERSION = "18"
 
 # Redirect rules for API routes -> Netlify Functions
+# NOTE: No :splat in the target — this preserves event.path as the original
+# request path (/api/auth/login), which Express routes can match correctly.
 [[redirects]]
   from = "/api/*"
-  to = "/.netlify/functions/api/:splat"
+  to = "/.netlify/functions/api"
   status = 200
 
 # Redirect rules for SPA routing
