@@ -147,7 +147,7 @@ export const AppProvider = ({ children }) => {
             author: {
                 id: updatedPostData.author?._id || updatedPostData.author?.id,
                 name: updatedPostData.author?.name || 'Unknown Author',
-                avatar: updatedPostData.author?.avatar || `https://placehold.net/avatar-4.svg'}`
+                avatar: updatedPostData.author?.avatar || 'https://placehold.net/avatar-4.svg'
             },
             comments: Array.isArray(updatedPostData.comments) ? updatedPostData.comments.map(comment => ({
                 ...(comment || {}),

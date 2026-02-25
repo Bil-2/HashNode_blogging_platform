@@ -19,8 +19,10 @@ export const configurePassport = () => {
   });
 
   // Google OAuth Strategy
+  // SERVER_URL must point to the BACKEND API URL (e.g. your Vercel/Render deployment URL)
+  // NOT the frontend URL — the callback must reach the Express server
   const serverUrl = process.env.NODE_ENV === 'production'
-    ? 'https://hashnode-blogging-platform.netlify.app'
+    ? (process.env.SERVER_URL || process.env.BACKEND_URL || 'http://localhost:5001')
     : `http://localhost:${process.env.PORT || 5001}`;
 
   passport.use(

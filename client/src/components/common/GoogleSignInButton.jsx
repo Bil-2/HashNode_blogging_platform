@@ -1,8 +1,9 @@
 const GoogleSignInButton = ({ text = "Continue with Google" }) => {
   const handleGoogleSignIn = () => {
-    // Redirect to backend Google OAuth route
-    const apiUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001/api';
-    window.location.href = `${apiUrl}/auth/google`;
+    // VITE_BACKEND_URL: set to http://localhost:5001 for local dev
+    // On Netlify (same domain), falls back to window.location.origin automatically
+    const backendUrl = import.meta.env.VITE_BACKEND_URL || window.location.origin;
+    window.location.href = `${backendUrl}/api/auth/google`;
   };
 
   return (

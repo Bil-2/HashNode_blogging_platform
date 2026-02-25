@@ -1,14 +1,12 @@
-# Netlify Configuration for HashNode Blogging Platform
-
 [build]
-  # Build command (installs backend+frontend dependencies, then builds frontend)
-  command = "npm install && npm install --prefix client && npm run build --prefix client && npm install --prefix server"
-  
-  # Publish directory (Vite default output)
+  # Install root deps (serverless-http lives here), then client & server deps, then build frontend
+  command = "npm install && npm install --prefix server && npm install --prefix client && npm run build --prefix client"
   publish = "client/dist"
-  
+  functions = "netlify/functions"
+
 [functions]
   node_bundler = "esbuild"
+  included_files = ["server/**"]
 
 [build.environment]
   # Node version

@@ -19,9 +19,9 @@ axios.interceptors.response.use(
       sessionStorage.removeItem('token');
       delete axios.defaults.headers.common['Authorization'];
 
-      // Only redirect if we're not already on the login page to prevent redirect loops
-      if (window.location.pathname !== '/login' && window.location.pathname !== '/auth') {
-        window.location.href = '/login?session_expired=true';
+      // Only redirect if we're not already on the auth page to prevent redirect loops
+      if (window.location.pathname !== '/auth') {
+        window.location.href = '/auth?session_expired=true';
       }
     }
     return Promise.reject(error);
