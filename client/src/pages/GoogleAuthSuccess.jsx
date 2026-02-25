@@ -19,30 +19,26 @@ const GoogleAuthSuccess = () => {
 
     const processGoogleAuth = async () => {
       const token = searchParams.get('token');
-      const userStr = searchParams.get('user');
 
-      if (!token || !userStr) {
+      if (!token) {
         navigate('/auth?error=missing_credentials', { replace: true });
         return;
       }
 
       try {
-        const userData = JSON.parse(decodeURIComponent(userStr));
-
-        // Map _id to id for frontend consistency
-        const mappedUser = { ...userData, id: userData._id || userData.id };
-
-        // Persist token & user in sessionStorage (same as regular login)
+        // 1. Immediately establish the token in axios config & session
         sessionStorage.setItem('token', token);
-        sessionStorage.setItem('user', JSON.stringify(mappedUser));
-
-        // Set axios default Authorization header
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-        // Update context user state
+        // 2. Fetch the user profile securely from backend
+        const { data: userData } = await axios.get('users/profile');
+        const mappedUser = { ...userData, id: userData._id || userData.id };
+
+        // 3. Persist user data natively & in React context
+        sessionStorage.setItem('user', JSON.stringify(mappedUser));
         setUser(mappedUser);
 
-        // Load posts and users into context — without this the dashboard is empty
+        // 4. Preload posts and users to populate dashboard
         try {
           const users = await userService.getAllUsers();
           await fetchPosts();
@@ -51,7 +47,7 @@ const GoogleAuthSuccess = () => {
           console.warn('GoogleAuthSuccess: failed to pre-load data:', dataError.message);
         }
 
-        // Redirect to dashboard
+        // 5. Success -> Dashboard!
         navigate('/dashboard', { replace: true });
       } catch (error) {
         console.error('GoogleAuthSuccess: Error processing auth data:', error);

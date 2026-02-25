@@ -166,20 +166,7 @@ export const googleAuthCallback = asyncHandler(async (req, res) => {
   // Determine the correct frontend URL
   const frontendUrl = process.env.CLIENT_URL || process.env.FRONTEND_URL || 'https://hashnode-blogging-platform.netlify.app';
 
-  // Redirect to frontend with token
-  res.redirect(`${frontendUrl}/auth/google/success?token=${token}&user=${encodeURIComponent(JSON.stringify({
-    _id: user._id,
-    name: user.name,
-    email: user.email,
-    isAdmin: user.isAdmin,
-    bio: user.bio,
-    location: user.location,
-    website: user.website,
-    avatar: user.avatar,
-    coverPhoto: user.coverPhoto,
-    twitter: user.twitter,
-    linkedin: user.linkedin,
-    followers: user.followers,
-    following: user.following,
-  }))}`);
+  // Securely redirect to frontend with ONLY the token
+  // The frontend will use the token to fetch the user profile via the API.
+  res.redirect(`${frontendUrl}/auth/google/success?token=${token}`);
 });
