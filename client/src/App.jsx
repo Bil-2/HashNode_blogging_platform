@@ -3,6 +3,7 @@ import React, { useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { useAppContext } from './hooks/useAuth';
 import useServerWarmup from './hooks/useServerWarmup';
+import useScrollReveal from './hooks/useScrollReveal';
 
 // Eager load critical components (visible on initial load)
 import Navbar from './components/layout/Navbar';
@@ -42,6 +43,9 @@ const AppContent = () => {
 
     // Warm up server on initial load (production only)
     useServerWarmup();
+    
+    // Initialize global scroll reveal animations
+    useScrollReveal();
 
     const isSpecialLayout = location.pathname === '/auth' || location.pathname === '/';
 
@@ -64,7 +68,7 @@ const AppContent = () => {
             <div className="min-h-screen font-sans transition-colors duration-500 bg-background text-text-primary scroll-snap-container">
                 <Navbar />
                 <BackToTop />
-                <main className="page-transition">
+                <main className="page-transition reveal-on-scroll">
                     <Suspense fallback={
                         <div className="flex justify-center items-center min-h-screen">
                             <Spinner />

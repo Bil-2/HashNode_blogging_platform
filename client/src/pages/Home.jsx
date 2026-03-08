@@ -183,14 +183,15 @@ const HomePage = () => {
                     <source src="https://cdn.pixabay.com/video/2024/03/26/205691-927672681_large.mp4" type="video/mp4" />
                 </video>
                 <div className="relative z-10 text-center py-20 px-4 h-full flex flex-col items-center justify-center">
-                    <AnimatedSection>
+                    {/* Hero Section */}
+                    <section className="text-center space-y-8 mt-16 lg:mt-24 reveal-on-scroll">
                         <h1 className="text-5xl md:text-7xl font-extrabold text-text-primary leading-tight">Share Your Stories with the World</h1>
                         <p className="mt-6 max-w-2xl mx-auto text-lg text-text-secondary">Create, edit, and explore blogs with likes, comments, and community support.</p>
                         <div className="mt-8 flex justify-center space-x-4">
                             <button onClick={() => navigate(isAuthenticated ? '/create-post' : '/auth', { state: { show: 'register' } })} className="bg-indigo-500 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-indigo-600 transition-colors">Create a Blog</button>
                             <button onClick={() => navigate('/explore-blogs')} className="bg-glass border border-glass text-text-primary px-8 py-3 rounded-full text-lg font-semibold hover:bg-white/20 transition-colors">Explore Blogs</button>
                         </div>
-                    </AnimatedSection>
+                    </section>
                 </div>
             </div>
 
@@ -311,7 +312,7 @@ const HomePage = () => {
                         <SkeletonCardGrid count={3} />
                     ) : posts.length > 0 ? (
                         <>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+                            <section className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-24 reveal-on-scroll">
                                 {posts.map((post, index) => (
                                     <div
                                         key={post.id}
@@ -321,7 +322,7 @@ const HomePage = () => {
                                         <PostCard post={post} />
                                     </div>
                                 ))}
-                            </div>
+                            </section>
 
                             {/* View All Button */}
                             <div className="text-center">
@@ -409,7 +410,15 @@ const HomePage = () => {
 
             {/* CTA Section */}
             <AnimatedSection className="py-20 px-4">
-                <div className="max-w-4xl mx-auto text-center bg-glass p-12 rounded-xl border border-glass"><h2 className="text-4xl font-bold text-text-primary">Ready to share your thoughts?</h2><p className="mt-4 text-text-secondary">Start your blog today!</p><div className="mt-8 flex justify-center"><button onClick={() => navigate('/auth', { state: { show: 'register' } })} className="bg-indigo-500 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-indigo-600 transition-colors">Get Started / Join Now</button></div></div>
+                <section className="mt-32 mb-20 reveal-on-scroll">
+                    <div className="max-w-4xl mx-auto text-center bg-glass p-12 rounded-xl border border-glass">
+                        <h2 className="text-4xl font-bold text-text-primary">Ready to share your thoughts?</h2>
+                        <p className="mt-4 text-text-secondary">Start your blog today!</p>
+                        <div className="mt-8 flex justify-center">
+                            <button onClick={() => navigate('/auth', { state: { show: 'register' } })} className="bg-indigo-500 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-indigo-600 transition-colors">Get Started / Join Now</button>
+                        </div>
+                    </div>
+                </section>
             </AnimatedSection>
 
             <Footer />

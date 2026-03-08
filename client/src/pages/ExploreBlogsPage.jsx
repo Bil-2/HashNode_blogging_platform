@@ -13,19 +13,19 @@ const ExploreBlogsPage = () => {
     const exploreBgUrl = 'https://images.unsplash.com/photo-1519681393784-d120267933ba';
 
     return (
-        <div className="relative min-h-screen isolate">
+        <div className="relative min-h-screen isolate reveal-on-scroll">
             <div
                 className="fixed inset-0 -z-10 bg-cover bg-center opacity-15"
                 style={{ backgroundImage: `url(${exploreBgUrl})` }}
                 aria-hidden="true"
             />
             <div className="relative z-0">
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32">
-                    <div className="text-center mb-16">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
+                    <div className="text-center md:text-left">
                         <h1 className="text-5xl md:text-7xl font-extrabold text-text-primary mb-4 tracking-tight">
                             Explore All Stories
                         </h1>
-                        <p className="text-lg text-text-secondary max-w-3xl mx-auto">
+                        <p className="text-lg text-text-secondary max-w-3xl mx-auto md:mx-0">
                             Discover stories, thinking, and expertise from writers on any topic.
                         </p>
                     </div>
