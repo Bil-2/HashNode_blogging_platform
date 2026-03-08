@@ -1,16 +1,13 @@
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 
 /**
  * useScrollReveal
  * 
  * Global hook that listens for all elements with the 'reveal-on-scroll' class.
- * When they enter the viewport, it adds the 'revealed' class to trigger CSS animations.
- * It re-triggers scanning on every route change to ensure newly mounted pages also animate.
+ * It uses a MutationObserver to automatically detect dynamically (lazy) loaded
+ * pages and attaches to them to ensure they animate properly.
  */
 const useScrollReveal = () => {
-    const location = useLocation();
-
     useEffect(() => {
         const observerOptions = {
             root: null,
@@ -18,26 +15,43 @@ const useScrollReveal = () => {
             threshold: 0.15 // Trigger when 15% of the element is visible
         };
 
-        const observer = new IntersectionObserver((entries, observer) => {
+        const intersectionObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('revealed');
-                    // Stop observing once revealed to prevent re-animating on scroll up
-                    // (Optional: remove this if you want elements to hide/reveal repeatedly)
                     observer.unobserve(entry.target);
                 }
             });
         }, observerOptions);
 
-        // Find all elements that should be animated
-        const revealElements = document.querySelectorAll('.reveal-on-scroll');
-        revealElements.forEach(el => observer.observe(el));
+        const observeNewElements = () => {
+            // Find all unrevealed elements
+            const elements = document.querySelectorAll('.reveal-on-scroll:not(.revealed)');
+            elements.forEach(el => intersectionObserver.observe(el));
+        };
+
+        // 1. Observe any elements already in the DOM
+        observeNewElements();
+
+        // 2. Setup MutationObserver to catch elements loaded via React.lazy/Suspense updates
+        const mutationObserver = new MutationObserver((mutationsList) => {
+            for (const mutation of mutationsList) {
+                if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                    observeNewElements();
+                }
+            }
+        });
+
+        mutationObserver.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
 
         return () => {
-            revealElements.forEach(el => observer.unobserve(el));
-            observer.disconnect();
+            mutationObserver.disconnect();
+            intersectionObserver.disconnect();
         };
-    }, [location.pathname]); // Re-run whenever the route changes
+    }, []); // Only setup once! Mutation observer handles dynamic route switches
 };
 
 export default useScrollReveal;
