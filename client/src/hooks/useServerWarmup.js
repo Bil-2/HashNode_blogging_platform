@@ -15,7 +15,7 @@ const useServerWarmup = () => {
 
     const warmupServer = async () => {
       try {
-        const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001/api';
+        const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || '/api';
         const healthUrl = `${apiBaseUrl.replace('/api', '')}/api/health`;
 
         console.log('🔥 Initiating server warmup...');

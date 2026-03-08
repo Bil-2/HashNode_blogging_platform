@@ -9,7 +9,7 @@ const PostDetailsPage = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const apiUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001/api';
+        const apiUrl = import.meta.env.VITE_API_BASE_URL || '/api';
         const res = await fetch(`${apiUrl}/posts/${id}`);
         const data = await res.json();
 
