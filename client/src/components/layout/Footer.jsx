@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { XIcon, GithubIcon, LinkedinIcon } from '../common/Icons';
 
 const Footer = () => (
@@ -5,9 +6,9 @@ const Footer = () => (
         <div className="max-w-7xl mx-auto py-12 px-8 bg-glass backdrop-blur-lg rounded-xl border border-glass">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div className="md:col-span-1">
-                    <a href="/" className="text-text-primary font-bold text-2xl tracking-wider">
+                    <Link to="/" className="text-text-primary font-bold text-2xl tracking-wider">
                         HashNode
-                    </a>
+                    </Link>
                     <p className="mt-4 text-sm text-text-secondary">A modern blogging platform with a sleek glassmorphism design.</p>
                     <div className="flex space-x-4 mt-4">
                         <a href="https://x.com/bag_biltu?s=21" target="_blank" rel="noopener noreferrer" className="text-text-secondary hover:text-text-primary transition-colors" aria-label="X"><XIcon /></a>
@@ -19,25 +20,25 @@ const Footer = () => (
                     <div>
                         <h3 className="text-sm font-semibold text-text-primary tracking-wider uppercase">Company</h3>
                         <ul className="mt-4 space-y-2">
-                            <li><a href="/about" className="text-base text-text-secondary hover:text-text-primary">About</a></li>
-                            <li><a href="/contact" className="text-base text-text-secondary hover:text-text-primary">Contact</a></li>
-                            <li><a href="/pricing" className="text-base text-text-secondary hover:text-text-primary">Pricing</a></li>
+                            <li><Link to="/about" className="text-base text-text-secondary hover:text-text-primary">About</Link></li>
+                            <li><Link to="/contact" className="text-base text-text-secondary hover:text-text-primary">Contact</Link></li>
+                            <li><Link to="/pricing" className="text-base text-text-secondary hover:text-text-primary">Pricing</Link></li>
                         </ul>
                     </div>
                     <div>
                         <h3 className="text-sm font-semibold text-text-primary tracking-wider uppercase">Resources</h3>
                         <ul className="mt-4 space-y-2">
-                            <li><a href="/explore-blogs" className="text-base text-text-secondary hover:text-text-primary">Blog</a></li>
-                            <li><a href="/help-center" className="text-base text-text-secondary hover:text-text-primary">Help Center</a></li>
-                            <li><a href="/community" className="text-base text-text-secondary hover:text-text-primary">Community</a></li>
+                            <li><Link to="/explore-blogs" className="text-base text-text-secondary hover:text-text-primary">Blog</Link></li>
+                            <li><Link to="/help-center" className="text-base text-text-secondary hover:text-text-primary">Help Center</Link></li>
+                            <li><Link to="/community" className="text-base text-text-secondary hover:text-text-primary">Community</Link></li>
                         </ul>
                     </div>
                     <div>
                         <h3 className="text-sm font-semibold text-text-primary tracking-wider uppercase">Legal</h3>
                         <ul className="mt-4 space-y-2">
-                            <li><a href="/privacy-policy" className="text-base text-text-secondary hover:text-text-primary">Privacy Policy</a></li>
-                            <li><a href="/terms" className="text-base text-text-secondary hover:text-text-primary">Terms & Conditions</a></li>
-                            <li><a href="/disclaimer" className="text-base text-text-secondary hover:text-text-primary">Disclaimer</a></li>
+                            <li><Link to="/privacy-policy" className="text-base text-text-secondary hover:text-text-primary">Privacy Policy</Link></li>
+                            <li><Link to="/terms" className="text-base text-text-secondary hover:text-text-primary">Terms & Conditions</Link></li>
+                            <li><Link to="/disclaimer" className="text-base text-text-secondary hover:text-text-primary">Disclaimer</Link></li>
                         </ul>
                     </div>
                 </div>
