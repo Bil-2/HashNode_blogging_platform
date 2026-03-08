@@ -64,11 +64,11 @@ body {
 }
 
 .light {
-    --background: #f3f4f6;
-    --text-primary: #1f2937;
-    --text-secondary: #4b5563;
-    --glass-bg: rgba(255, 255, 255, 0.2);
-    --glass-border: rgba(0, 0, 0, 0.05);
+    --background: #ffffff;
+    --text-primary: #111827;
+    --text-secondary: #374151;
+    --glass-bg: rgba(255, 255, 255, 0.4);
+    --glass-border: rgba(0, 0, 0, 0.08);
     --accent: #4f46e5;
     --accent-hover: #6366f1;
 }
