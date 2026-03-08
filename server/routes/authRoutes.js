@@ -27,10 +27,14 @@ router.get(
   })
 );
 
+const frontendUrl = process.env.NODE_ENV === 'production'
+  ? (process.env.CLIENT_URL || process.env.FRONTEND_URL || 'https://hashnode-blogging-platform.netlify.app')
+  : 'http://localhost:5173';
+
 router.get(
   '/google/callback',
   passport.authenticate('google', {
-    failureRedirect: `${process.env.CLIENT_URL || process.env.FRONTEND_URL || 'https://hashnode-blogging-platform.netlify.app'}/auth?error=google_auth_failed`,
+    failureRedirect: `${frontendUrl}/auth?error=google_auth_failed`,
     session: false
   }),
   googleAuthCallback

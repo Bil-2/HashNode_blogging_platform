@@ -156,15 +156,16 @@ export const googleAuthCallback = asyncHandler(async (req, res) => {
   // User is authenticated via passport, available in req.user
   const user = req.user;
 
+  const frontendUrl = process.env.NODE_ENV === 'production'
+    ? (process.env.CLIENT_URL || process.env.FRONTEND_URL || 'https://hashnode-blogging-platform.netlify.app')
+    : 'http://localhost:5173';
+
   if (!user) {
-    return res.redirect(`${process.env.FRONTEND_URL || process.env.CLIENT_URL}/auth?error=authentication_failed`);
+    return res.redirect(`${frontendUrl}/auth?error=authentication_failed`);
   }
 
   // Generate JWT token
   const token = generateToken(user._id);
-
-  // Determine the correct frontend URL
-  const frontendUrl = process.env.CLIENT_URL || process.env.FRONTEND_URL || 'https://hashnode-blogging-platform.netlify.app';
 
   // Securely redirect to frontend with ONLY the token
   // The frontend will use the token to fetch the user profile via the API.
