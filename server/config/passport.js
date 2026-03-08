@@ -22,7 +22,9 @@ export const configurePassport = () => {
   // SERVER_URL must point to the BACKEND API URL (e.g. your Netlify site URL)
   // NOT the frontend URL — the callback must reach the Express server.
   // Falls back to localhost for local development when SERVER_URL is not set.
-  const serverUrl = process.env.SERVER_URL || `http://localhost:${process.env.PORT || 5001}`;
+  const serverUrl = process.env.NODE_ENV === 'production'
+    ? (process.env.SERVER_URL || process.env.BACKEND_URL || 'https://hashnode-blogging-platform.netlify.app')
+    : `http://localhost:${process.env.PORT || 5001}`;
 
   passport.use(
     new GoogleStrategy(
