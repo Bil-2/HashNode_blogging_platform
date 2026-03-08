@@ -1,4 +1,3 @@
-```javascript
 import React from 'react';
 import InfoPageLayout from './InfoPageLayout';
 import { Link } from 'react-router-dom';
@@ -50,4 +49,3 @@ const HelpCenterPage = () => (
 );
 
 export default HelpCenterPage;
-```

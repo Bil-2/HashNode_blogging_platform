@@ -68,7 +68,7 @@ const AppContent = () => {
             <div className="min-h-screen font-sans transition-colors duration-500 bg-background text-text-primary scroll-snap-container">
                 <Navbar />
                 <BackToTop />
-                <main className="page-transition reveal-on-scroll">
+                <main className="page-transition">
                     <Suspense fallback={
                         <div className="flex justify-center items-center min-h-screen">
                             <Spinner />
