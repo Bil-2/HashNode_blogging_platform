@@ -49,9 +49,20 @@ const AppContent = () => {
 
     const isSpecialLayout = location.pathname === '/auth' || location.pathname === '/';
 
-    // Scroll to top on route change without smooth animation to avoid conflicting with instant DOM paints
+    // Scroll to top on route change, defeating CSS smooth-scroll to prevent interrupted scroll animations
     useEffect(() => {
-        window.scrollTo(0, 0);
+        // Temporarily disable global CSS smooth scrolling
+        document.documentElement.style.scrollBehavior = 'auto';
+        
+        // Force instant jump to top
+        window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+        
+        // Re-enable smooth scrolling after the browser paints the instant jump
+        const timeoutId = setTimeout(() => {
+            document.documentElement.style.scrollBehavior = ''; // Reverts to CSS stylesheet value
+        }, 100);
+
+        return () => clearTimeout(timeoutId);
     }, [location.pathname]);
 
     useEffect(() => {
