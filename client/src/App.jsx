@@ -49,9 +49,9 @@ const AppContent = () => {
 
     const isSpecialLayout = location.pathname === '/auth' || location.pathname === '/';
 
-    // Smooth scroll to top on route change
+    // Scroll to top on route change without smooth animation to avoid conflicting with instant DOM paints
     useEffect(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo(0, 0);
     }, [location.pathname]);
 
     useEffect(() => {
