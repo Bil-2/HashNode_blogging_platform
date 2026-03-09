@@ -2,6 +2,7 @@ import serverless from 'serverless-http';
 import app from '../../server/server.js';
 
 export const handler = serverless(app, {
+  binary: ['image/*', 'multipart/form-data'],
   request(req, event) {
     // We must rebuild the URL to include both the path and the query string.
     // Otherwise, OAuth callbacks lose the ?code=... and enter an infinite loop.

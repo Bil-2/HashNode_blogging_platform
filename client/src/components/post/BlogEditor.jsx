@@ -46,7 +46,7 @@ const BlogEditor = ({ blogToEdit, onSave, onCancel }) => {
                         Authorization: `Bearer ${token}`,
                     },
                 };
-                const { data } = await axios.post('/upload', formData, config);
+                const { data } = await axios.post('upload', formData, config);
                 uploadedImageUrl = data.image;
             }
 

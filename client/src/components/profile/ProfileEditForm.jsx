@@ -62,7 +62,7 @@ const ProfileEditForm = ({ user, onSave, onCancel }) => {
                 const storedUser = JSON.parse(sessionStorage.getItem('user'));
                 const token = storedUser?.token;
 
-                const { data } = await axios.post('/upload', formData, {
+                const { data } = await axios.post('upload', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${token}`,
