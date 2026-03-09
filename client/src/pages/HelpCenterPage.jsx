@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const HelpCenterPage = () => (
   <InfoPageLayout title="Help & Training Center">
     <p className="text-xl mb-12">
-      Everything you need to know about HashNode. From getting started to advanced platform training, we've got you covered.
+      Everything you need to know about HashNode. From getting started to advanced platform training, we&apos;ve got you covered.
     </p>
 
     <div className="space-y-8">
@@ -15,7 +15,7 @@ const HelpCenterPage = () => (
           Getting Started
         </h3>
         <p className="text-text-secondary">
-          To start your journey with HashNode, simply sign up for a free Community account. Once registered, your personal dashboard serves as your central hub. Clicking "Write" at the top will instantly open our distraction-free editor.
+          To start your journey with HashNode, simply sign up for a free Community account. Once registered, your personal dashboard serves as your central hub. Clicking &quot;Write&quot; at the top will instantly open our distraction-free editor.
         </p>
       </div>
 

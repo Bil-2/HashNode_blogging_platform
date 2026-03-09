@@ -6,7 +6,7 @@ const PricingPage = () => (
   <InfoPageLayout title="Simple, Transparent Pricing">
     <div className="text-center max-w-2xl mx-auto mb-16">
       <p className="text-xl">
-        We believe in the power of free expression. Based on our extensive market research, locking knowledge behind paywalls limits potential. That's why HashNode is built differently.
+        We believe in the power of free expression. Based on our extensive market research, locking knowledge behind paywalls limits potential. That&apos;s why HashNode is built differently.
       </p>
     </div>
 

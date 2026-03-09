@@ -31,8 +31,9 @@ export const configurePassport = () => {
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: `${serverUrl}/api/auth/google/callback`,
+        callbackURL: process.env.GOOGLE_CALLBACK_URL || `${serverUrl}/api/auth/google/callback`,
         passReqToCallback: true,
+        proxy: true, // Trust the reverse proxy (crucial for Netlify/Vercel)
         scope: ['profile', 'email']
       },
       async (req, accessToken, refreshToken, profile, done) => {

@@ -9,7 +9,7 @@ const PrivacyPolicyPage = () => (
 
         <h3 className="text-2xl mt-8 mb-4">1. Information We Collect</h3>
         <p>
-            We only ask for personal information when we truly need it to provide a service to you. We collect it by fair and lawful means, with your complete knowledge and active consent. We also let you know precisely why we're collecting it and how it will be used. 
+            We only ask for personal information when we truly need it to provide a service to you. We collect it by fair and lawful means, with your complete knowledge and active consent. We also let you know precisely why we&apos;re collecting it and how it will be used. 
         </p>
         <ul className="list-disc pl-6 mb-6">
             <li><strong>Account Data:</strong> Name, email address, and authentication credentials.</li>

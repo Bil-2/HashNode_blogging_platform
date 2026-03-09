@@ -6,9 +6,9 @@ const ContactPage = () => (
   <InfoPageLayout title="Contact & Support">
     <div className="grid lg:grid-cols-2 gap-12">
       <div>
-        <h2 className="text-3xl font-bold mb-6">Let's start a conversation.</h2>
+        <h2 className="text-3xl font-bold mb-6">Let&apos;s start a conversation.</h2>
         <p className="text-lg text-text-secondary mb-8">
-          Whether you're looking for market research insights, specific platform training, or have a technical question, our dedicated team is here to provide crystal-clear solutions.
+          Whether you&apos;re looking for market research insights, specific platform training, or have a technical question, our dedicated team is here to provide crystal-clear solutions.
         </p>
 
         <div className="space-y-6">

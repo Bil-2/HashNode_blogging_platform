@@ -4,7 +4,7 @@ import InfoPageLayout from './InfoPageLayout';
 const TermsAndConditionsPage = () => (
     <InfoPageLayout title="Terms & Conditions">
         <p className="lead mb-8">
-            These terms and conditions outline the rules and regulations for the use of HashNode's Website and Platform. 
+            These terms and conditions outline the rules and regulations for the use of HashNode&apos;s Website and Platform. 
             By accessing this website we assume you accept these terms and conditions in full.
         </p>
 

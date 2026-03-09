@@ -4,7 +4,6 @@ import { useAppContext } from '../hooks/useAuth';
 import Spinner from '../components/common/Spinner';
 import axios from 'axios';
 import { userService } from '../api/userService';
-import { postService } from '../api/postService';
 
 const GoogleAuthSuccess = () => {
   const navigate = useNavigate();
@@ -31,7 +30,10 @@ const GoogleAuthSuccess = () => {
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
         // 2. Fetch the user profile securely from backend
-        const { data: userData } = await axios.get('users/profile');
+        // explicitly pass the token in the config to bypass any Axios interceptor race conditions
+        const { data: userData } = await axios.get('users/profile', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
         const mappedUser = { ...userData, id: userData._id || userData.id };
 
         // 3. Persist user data natively & in React context
@@ -40,7 +42,7 @@ const GoogleAuthSuccess = () => {
 
         // 4. Preload posts and users to populate dashboard
         try {
-          const users = await userService.getAllUsers();
+          await userService.getAllUsers();
           await fetchPosts();
         } catch (dataError) {
           // Non-fatal: dashboard will still load but may show no content initially
