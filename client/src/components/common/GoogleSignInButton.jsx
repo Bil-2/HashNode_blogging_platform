@@ -1,8 +1,14 @@
 const GoogleSignInButton = ({ text = "Continue with Google" }) => {
   const handleGoogleSignIn = () => {
-    // VITE_BACKEND_URL: set to http://localhost:5001 for local dev
-    // On Netlify (same domain), falls back to window.location.origin automatically
-    const backendUrl = import.meta.env.VITE_BACKEND_URL || window.location.origin;
+    // In production, fallback to window.location.origin dynamically to avoid
+    // an accidentally hardcoded locally committed .env file overriding it.
+    let backendUrl = import.meta.env.VITE_BACKEND_URL || window.location.origin;
+    
+    // Safety check: Don't use localhost in production
+    if (import.meta.env.PROD && backendUrl.includes("localhost")) {
+      backendUrl = window.location.origin;
+    }
+
     window.location.href = `${backendUrl}/api/auth/google`;
   };
 
