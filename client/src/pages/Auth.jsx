@@ -22,7 +22,7 @@ const useIsDesktop = () => {
 
 const FormInput = ({ id, label, type, value, onChange, placeholder, required = true }) => (
     <div>
-        <label htmlFor={id} className="text-sm font-medium text-text-secondary">{label}</label>
+        <label htmlFor={id} className="text-xs sm:text-sm font-medium text-text-secondary">{label}</label>
         <input
             id={id}
             name={id}
@@ -31,7 +31,7 @@ const FormInput = ({ id, label, type, value, onChange, placeholder, required = t
             value={value}
             onChange={onChange}
             autoComplete={id === 'email' ? 'email' : id === 'name' ? 'name' : 'off'}
-            className="mt-1 appearance-none relative block w-full px-3 py-2 border border-glass placeholder-text-secondary text-text-primary bg-transparent rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="mt-1 appearance-none relative block w-full px-3 py-2 border border-glass border-gray-400 placeholder-text-secondary text-text-primary text-sm bg-transparent rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             placeholder={placeholder}
         />
     </div>
@@ -43,7 +43,7 @@ const PasswordInput = ({ id, label, value, onChange, placeholder }) => {
 
     return (
         <div>
-            <label htmlFor={id} className="text-sm font-medium text-text-secondary">{label}</label>
+            <label htmlFor={id} className="text-xs sm:text-sm font-medium text-text-secondary">{label}</label>
             <div className="relative mt-1">
                 <input
                     id={id}
@@ -53,13 +53,13 @@ const PasswordInput = ({ id, label, value, onChange, placeholder }) => {
                     value={value}
                     onChange={onChange}
                     autoComplete={id === 'password' ? 'current-password' : id === 'confirmPassword' ? 'new-password' : 'off'}
-                    className="appearance-none relative block w-full px-3 py-2 border border-glass placeholder-text-secondary text-text-primary bg-transparent rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="appearance-none relative block w-full px-3 py-2 border border-glass border-gray-400 placeholder-text-secondary text-text-primary text-sm bg-transparent rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     placeholder={placeholder}
                 />
                 <button
                     type="button"
                     onClick={toggleVisibility}
-                    className="absolute inset-y-0 right-0 px-3 flex items-center text-text-secondary hover:text-text-primary"
+                    className="absolute inset-y-0 right-0 px-2 sm:px-3 flex items-center text-text-secondary hover:text-text-primary transition-colors"
                 >
                     {isVisible ? (
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -81,9 +81,9 @@ const PasswordStrengthIndicator = ({ strength }) => {
     const strengthLabels = ["Weak", "Medium", "Strong", "Very Strong"];
     const strengthColors = ["bg-red-500", "bg-orange-500", "bg-yellow-500", "bg-green-500"];
     return (
-        <div className="flex items-center mt-2 space-x-2">
-            <div className="w-full bg-gray-700 rounded-full h-2"><motion.div className={`h-2 rounded-full ${strengthColors[strength]}`} initial={{ width: 0 }} animate={{ width: `${((strength + 1) / 4) * 100}%` }} transition={{ duration: 0.5 }} /></div>
-            <span className="text-xs text-text-secondary w-24 text-right">{strengthLabels[strength]}</span>
+        <div className="flex items-center mt-2 space-x-1 sm:space-x-2">
+            <div className="w-full bg-gray-700 rounded-full h-1.5 sm:h-2"><motion.div className={`h-1.5 sm:h-2 rounded-full ${strengthColors[strength]}`} initial={{ width: 0 }} animate={{ width: `${((strength + 1) / 4) * 100}%` }} transition={{ duration: 0.5 }} /></div>
+            <span className="text-xs text-text-secondary w-20 sm:w-24 text-right">{strengthLabels[strength]}</span>
         </div>
     );
 };
@@ -127,19 +127,19 @@ const AuthPage = () => {
     const backgroundImageUrl = "url('https://picsum.photos/1920/1080')";
 
     return (
-        <div className="relative min-h-screen flex items-center justify-center p-4 overflow-hidden isolate">
+        <div className="relative min-h-screen flex items-center justify-center p-2 sm:p-4 md:p-6 overflow-x-hidden isolate">
             <div
                 className="fixed inset-0 w-full h-full object-cover -z-10 bg-cover bg-center opacity-25"
                 style={{ backgroundImage: backgroundImageUrl }}
                 aria-hidden="true"
             />
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, ease: "easeOut" }} className="relative w-full max-w-4xl min-h-[650px] md:h-[600px] bg-white/5 backdrop-blur-lg rounded-2xl shadow-2xl border border-white/10 overflow-hidden" >
-                <div className="w-full h-full relative overflow-hidden">
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, ease: "easeOut" }} className="relative w-full max-w-4xl min-h-screen sm:min-[700px] md:min-h-[600px] bg-background/100 backdrop-blur-lg rounded-xl sm:rounded-2xl shadow-2xl border border-white/10 overflow-hidden flex flex-col" >
+                <div className="absolute inset-0 w-full h-full overflow-hidden">
 
                     <motion.div
                         animate={{ x: view === 'login' ? '0%' : (isDesktop ? '100%' : '0%') }}
                         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                        className="absolute top-0 left-0 w-full md:w-1/2 h-full p-8 md:p-12 z-20 flex flex-col justify-center overflow-y-auto no-scrollbar"
+                        className="absolute top-0 left-0 w-full md:w-1/2 h-full p-4 sm:p-6 md:p-12 z-20 flex flex-col justify-center overflow-y-auto no-scrollbar"
                     >
                         <AnimatePresence mode="wait">
                             <motion.div
@@ -148,6 +148,7 @@ const AuthPage = () => {
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: 50 }}
                                 transition={{ duration: 0.5 }}
+                                className="w-full"
                             >
                                 {view === 'login' && <LoginForm setView={setView} />}
                                 {view === 'register' && <RegisterForm setView={setView} />}
@@ -206,8 +207,8 @@ const LoginForm = ({ setView }) => {
 
     return (
         <motion.div variants={formVariants} initial="hidden" animate="visible">
-            <motion.h2 variants={formItemVariants} className="text-center text-3xl font-extrabold text-text-primary">Log in</motion.h2>
-            <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+            <motion.h2 variants={formItemVariants} className="text-center text-2xl sm:text-3xl font-extrabold text-text-primary">Log in</motion.h2>
+            <form className="mt-6 sm:mt-8 space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
                 {error && <p className="text-red-400 text-center">{error}</p>}
                 <motion.div variants={formItemVariants}><FormInput id="email" label="Email Address" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" /></motion.div>
                 <motion.div variants={formItemVariants}><PasswordInput id="password" label="Password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" /></motion.div>
@@ -276,8 +277,8 @@ const RegisterForm = ({ setView }) => {
 
     return (
         <motion.div variants={formVariants} initial="hidden" animate="visible">
-            <motion.h2 variants={formItemVariants} className="text-center text-3xl font-extrabold text-text-primary">Create an Account</motion.h2>
-            <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+            <motion.h2 variants={formItemVariants} className="text-center text-2xl sm:text-3xl font-extrabold text-text-primary">Create an Account</motion.h2>
+            <form className="mt-6 sm:mt-8 space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
                 {error && <p className="text-red-400 text-center">{error}</p>}
                 <motion.div variants={formItemVariants}><FormInput id="name" label="Full Name" type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Your Name" /></motion.div>
                 <motion.div variants={formItemVariants}><FormInput id="email" label="Email Address" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" /></motion.div>
@@ -336,11 +337,11 @@ const ForgotPasswordForm = ({ setView }) => {
 
     return (
         <motion.div variants={formVariants} initial="hidden" animate="visible">
-            <motion.h2 variants={formItemVariants} className="text-center text-3xl font-extrabold text-text-primary">Forgot Password</motion.h2>
-            <p className="mt-2 text-center text-sm text-text-secondary">
+            <motion.h2 variants={formItemVariants} className="text-center text-2xl sm:text-3xl font-extrabold text-text-primary">Forgot Password</motion.h2>
+            <p className="mt-2 text-center text-xs sm:text-sm text-text-secondary">
                 Enter your email and we&apos;ll send you a link to reset your password.
             </p>
-            <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+            <form className="mt-6 sm:mt-8 space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
                 {error && <p className="text-red-400 text-center">{error}</p>}
                 {message && <p className="text-green-400 text-center">{message}</p>}
                 <motion.div variants={formItemVariants}><FormInput id="email" label="Email Address" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" /></motion.div>

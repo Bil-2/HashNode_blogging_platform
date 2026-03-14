@@ -1,33 +1,22 @@
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
 const sendEmail = async (options) => {
-  const transporterOptions = {
-    auth: {
-      user: process.env.EMAIL_USERNAME,
-      pass: process.env.EMAIL_PASSWORD,
-    },
-  };
-
-  if (process.env.EMAIL_SERVICE) {
-    transporterOptions.service = process.env.EMAIL_SERVICE;
-  } else {
-    transporterOptions.host = process.env.EMAIL_HOST;
-    transporterOptions.port = process.env.EMAIL_PORT;
-    transporterOptions.secure = process.env.EMAIL_PORT == 465;
-  }
-
-  const transporter = nodemailer.createTransport(transporterOptions);
+  const resend = new Resend(process.env.RESEND_API_KEY);
 
   const message = {
-    from: `${process.env.FROM_NAME || 'HashNode'} <${process.env.EMAIL_USERNAME}>`,
+    from: `${process.env.FROM_NAME || 'HashNode'} <${process.env.EMAIL_FROM}>`,
     to: options.email,
     subject: options.subject,
     text: options.message,
   };
 
-  const info = await transporter.sendMail(message);
-
-  console.log('Message sent: %s', info.messageId);
+  try {
+    const data = await resend.emails.send(message);
+    console.log('Message sent: %s', data.id);
+  } catch (error) {
+    console.error('Error sending email via Resend:', error);
+    throw new Error('Email could not be sent to ' + options.email);
+  }
 };
 
 export default sendEmail;

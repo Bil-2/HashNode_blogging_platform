@@ -182,103 +182,95 @@ const HomePage = () => {
                 >
                     <source src="https://cdn.pixabay.com/video/2024/03/26/205691-927672681_large.mp4" type="video/mp4" />
                 </video>
-                <div className="relative z-10 text-center py-20 px-4 h-full flex flex-col items-center justify-center">
+                <div className="relative z-10 text-center py-10 sm:py-16 md:py-20 px-3 sm:px-4 h-full flex flex-col items-center justify-center">
                     {/* Hero Section */}
-                    <section className="text-center space-y-8 mt-16 lg:mt-24 reveal-on-scroll">
-                        <h1 className="text-5xl md:text-7xl font-extrabold text-text-primary leading-tight">Share Your Stories with the World</h1>
-                        <p className="mt-6 max-w-2xl mx-auto text-lg text-text-secondary">Create, edit, and explore blogs with likes, comments, and community support.</p>
-                        <div className="mt-8 flex justify-center space-x-4">
-                            <button onClick={() => navigate(isAuthenticated ? '/create-post' : '/auth', { state: { show: 'register' } })} className="bg-indigo-500 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-indigo-600 transition-colors">Create a Blog</button>
-                            <button onClick={() => navigate('/explore-blogs')} className="bg-glass border border-glass text-text-primary px-8 py-3 rounded-full text-lg font-semibold hover:bg-white/20 transition-colors">Explore Blogs</button>
+                    <section className="text-center space-y-4 sm:space-y-6 md:space-y-8 mt-8 sm:mt-12 lg:mt-24 reveal-on-scroll w-full">
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-extrabold text-text-primary leading-tight px-2">Share Your Stories with the World</h1>
+                        <p className="mt-3 sm:mt-4 md:mt-6 max-w-2xl mx-auto text-xs sm:text-sm md:text-base lg:text-lg text-text-secondary px-2">Create, edit, and explore blogs with likes, comments, and community support.</p>
+                        <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 px-2">
+                            <button onClick={() => navigate(isAuthenticated ? '/create-post' : '/auth', { state: { show: 'register' } })} className="bg-indigo-500 text-white px-6 sm:px-8 py-2 sm:py-3 rounded-full text-sm sm:text-lg font-semibold hover:bg-indigo-600 transition-colors">Create a Blog</button>
+                            <button onClick={() => navigate('/explore-blogs')} className="bg-glass border border-glass text-text-primary px-6 sm:px-8 py-2 sm:py-3 rounded-full text-sm sm:text-lg font-semibold hover:bg-white/20 transition-colors">Explore Blogs</button>
                         </div>
                     </section>
                 </div>
             </div>
 
             {/* Features Section */}
-            <AnimatedSection className="py-20 px-4 scroll-snap-section">
-                <div className="max-w-5xl mx-auto grid md:grid-cols-4 gap-8 text-center">
-                    <div className="flex flex-col items-center"><div className="bg-glass p-4 rounded-full border border-glass"><EditIcon /></div><h3 className="mt-4 text-xl font-bold text-text-primary">Rich Text Editor</h3><p className="mt-2 text-text-secondary">Create beautiful blogs with an intuitive editor.</p></div>
-                    <div className="flex flex-col items-center"><div className="bg-glass p-4 rounded-full border border-glass"><HeartIcon className="w-6 h-6 text-text-primary" /></div><h3 className="mt-4 text-xl font-bold text-text-primary">Like & Comment</h3><p className="mt-2 text-text-secondary">Engage with posts and connect with authors.</p></div>
-                    <div className="flex flex-col items-center"><div className="bg-glass p-4 rounded-full border border-glass"><UserIcon /></div><h3 className="mt-4 text-xl font-bold text-text-primary">Manage Profile</h3><p className="mt-2 text-text-secondary">Customize your profile and manage your posts.</p></div>
-                    <div className="flex flex-col items-center"><div className="bg-glass p-4 rounded-full border border-glass"><CompassIcon /></div><h3 className="mt-4 text-xl font-bold text-text-primary">Discover Blogs</h3><p className="mt-2 text-text-secondary">Explore content from a diverse community of writers.</p></div>
+            <AnimatedSection className="py-12 sm:py-16 md:py-20 px-3 sm:px-4 scroll-snap-section">
+                <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8 text-center">
+                    <div className="flex flex-col items-center"><div className="bg-glass p-3 sm:p-4 rounded-full border border-glass"><EditIcon /></div><h3 className="mt-3 sm:mt-4 text-base sm:text-lg md:text-xl font-bold text-text-primary">Rich Text Editor</h3><p className="mt-2 text-xs sm:text-sm text-text-secondary">Create beautiful blogs with an intuitive editor.</p></div>
+                    <div className="flex flex-col items-center"><div className="bg-glass p-3 sm:p-4 rounded-full border border-glass"><HeartIcon className="w-5 sm:w-6 h-5 sm:h-6 text-text-primary" /></div><h3 className="mt-3 sm:mt-4 text-base sm:text-lg md:text-xl font-bold text-text-primary">Like & Comment</h3><p className="mt-2 text-xs sm:text-sm text-text-secondary">Engage with posts and connect with authors.</p></div>
+                    <div className="flex flex-col items-center"><div className="bg-glass p-3 sm:p-4 rounded-full border border-glass"><UserIcon /></div><h3 className="mt-3 sm:mt-4 text-base sm:text-lg md:text-xl font-bold text-text-primary">Manage Profile</h3><p className="mt-2 text-xs sm:text-sm text-text-secondary">Customize your profile and manage your posts.</p></div>
+                    <div className="flex flex-col items-center"><div className="bg-glass p-3 sm:p-4 rounded-full border border-glass"><CompassIcon /></div><h3 className="mt-3 sm:mt-4 text-base sm:text-lg md:text-xl font-bold text-text-primary">Discover Blogs</h3><p className="mt-2 text-xs sm:text-sm text-text-secondary">Explore content from a diverse community of writers.</p></div>
                 </div>
             </AnimatedSection>
 
             {/* Why Choose Us Section */}
-            <AnimatedSection className="py-20 px-4 scroll-snap-section">
+            <AnimatedSection className="py-12 sm:py-16 md:py-20 px-3 sm:px-4 scroll-snap-section">
                 <div className="max-w-7xl mx-auto">
-                    <h2 className="text-4xl font-extrabold text-text-primary text-center mb-16">Why Choose HashNode?</h2>
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-text-primary text-center mb-10 sm:mb-12 md:mb-16">Why Choose HashNode?</h2>
 
-                    <div className="bg-glass backdrop-blur-sm rounded-3xl border border-glass p-12">
-                        <div className="grid lg:grid-cols-2 gap-12 items-start">
+                    <div className="bg-glass backdrop-blur-sm rounded-2xl sm:rounded-3xl border border-glass p-6 sm:p-8 md:p-12">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-start">
                             {/* Left side - Features */}
-                            <div className="space-y-8">
-                                <div className="flex items-start space-x-4">
-                                    <div className="bg-glass p-3 rounded-lg border border-glass flex-shrink-0">
-                                        <ImageIcon className="w-6 h-6 text-text-primary" />
-                                    </div>
+                            <div className="space-y-6 sm:space-y-8">
+                                <div className="flex items-start space-x-3 sm:space-x-4">
+                                    <div className="bg-glass p-2 sm:p-3 rounded-lg border border-glass flex-shrink-0"><ImageIcon className="w-5 sm:w-6 h-5 sm:h-6 text-text-primary" /></div>
                                     <div>
-                                        <h3 className="text-xl font-bold text-text-primary mb-2">Unmatched Aesthetics</h3>
-                                        <p className="text-text-secondary leading-relaxed">Our unique glassmorphism design provides a clean, modern, and visually stunning reading and writing experience.</p>
+                                        <h3 className="text-base sm:text-lg md:text-xl font-bold text-text-primary mb-1 sm:mb-2">Unmatched Aesthetics</h3>
+                                        <p className="text-xs sm:text-sm text-text-secondary leading-relaxed">Our unique glassmorphism design provides a clean, modern, and visually stunning reading and writing experience.</p>
                                     </div>
                                 </div>
 
-                                <div className="flex items-start space-x-4">
-                                    <div className="bg-glass p-3 rounded-lg border border-glass flex-shrink-0">
-                                        <CommentIcon className="w-6 h-6 text-text-primary" />
-                                    </div>
+                                <div className="flex items-start space-x-3 sm:space-x-4">
+                                    <div className="bg-glass p-2 sm:p-3 rounded-lg border border-glass flex-shrink-0"><CommentIcon className="w-5 sm:w-6 h-5 sm:h-6 text-text-primary" /></div>
                                     <div>
-                                        <h3 className="text-xl font-bold text-text-primary mb-2">Community Focused</h3>
-                                        <p className="text-text-secondary leading-relaxed">We&apos;re more than a platform; we&apos;re a community. Engage with writers, get feedback, and grow together.</p>
+                                        <h3 className="text-base sm:text-lg md:text-xl font-bold text-text-primary mb-1 sm:mb-2">Community Focused</h3>
+                                        <p className="text-xs sm:text-sm text-text-secondary leading-relaxed">We're more than a platform; we're a community. Engage with writers, get feedback, and grow together.</p>
                                     </div>
                                 </div>
 
-                                <div className="flex items-start space-x-4">
-                                    <div className="bg-glass p-3 rounded-lg border border-glass flex-shrink-0">
-                                        <EditIcon className="w-6 h-6 text-text-primary" />
-                                    </div>
+                                <div className="flex items-start space-x-3 sm:space-x-4">
+                                    <div className="bg-glass p-2 sm:p-3 rounded-lg border border-glass flex-shrink-0"><EditIcon className="w-5 sm:w-6 h-5 sm:h-6 text-text-primary" /></div>
                                     <div>
-                                        <h3 className="text-xl font-bold text-text-primary mb-2">Powerful Tools</h3>
-                                        <p className="text-text-secondary leading-relaxed">Rich text editor, image uploads, categories, and everything you need to create amazing content.</p>
+                                        <h3 className="text-base sm:text-lg md:text-xl font-bold text-text-primary mb-1 sm:mb-2">Powerful Tools</h3>
+                                        <p className="text-xs sm:text-sm text-text-secondary leading-relaxed">Rich text editor, image uploads, categories, and everything you need to create amazing content.</p>
                                     </div>
                                 </div>
 
-                                <div className="flex items-start space-x-4">
-                                    <div className="bg-glass p-3 rounded-lg border border-glass flex-shrink-0">
-                                        <HeartIcon className="w-6 h-6 text-text-primary" />
-                                    </div>
+                                <div className="flex items-start space-x-3 sm:space-x-4">
+                                    <div className="bg-glass p-2 sm:p-3 rounded-lg border border-glass flex-shrink-0"><HeartIcon className="w-5 sm:w-6 h-5 sm:h-6 text-text-primary" /></div>
                                     <div>
-                                        <h3 className="text-xl font-bold text-text-primary mb-2">Social Engagement</h3>
-                                        <p className="text-text-secondary leading-relaxed">Like, comment, follow, and build meaningful connections with readers and fellow writers.</p>
+                                        <h3 className="text-base sm:text-lg md:text-xl font-bold text-text-primary mb-1 sm:mb-2">Social Engagement</h3>
+                                        <p className="text-xs sm:text-sm text-text-secondary leading-relaxed">Like, comment, follow, and build meaningful connections with readers and fellow writers.</p>
                                     </div>
                                 </div>
                             </div>
 
                             {/* Right side - Visual with Stats */}
-                            <div className="space-y-6">
-                                <div className="bg-glass backdrop-blur-sm rounded-2xl border border-glass p-8 text-center">
-                                    <h3 className="text-6xl font-bold text-indigo-400 mb-2">Community</h3>
-                                    <p className="text-text-secondary">Join thousands of writers</p>
+                            <div className="space-y-4 sm:space-y-6">
+                                <div className="bg-glass backdrop-blur-sm rounded-xl sm:rounded-2xl border border-glass p-6 sm:p-8 text-center">
+                                    <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-indigo-400 mb-1 sm:mb-2">Community</h3>
+                                    <p className="text-xs sm:text-sm text-text-secondary">Join thousands of writers</p>
                                 </div>
 
                                 {/* Stats Grid */}
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="bg-glass backdrop-blur-sm border border-glass rounded-xl p-6 text-center">
-                                        <p className="text-4xl font-bold text-indigo-400 mb-1">5000+</p>
-                                        <p className="text-sm text-text-secondary">Blogs Shared</p>
+                                <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                                    <div className="bg-glass backdrop-blur-sm border border-glass rounded-lg sm:rounded-xl p-4 sm:p-6 text-center">
+                                        <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-indigo-400 mb-1">5000+</p>
+                                        <p className="text-xs sm:text-sm text-text-secondary">Blogs</p>
                                     </div>
-                                    <div className="bg-glass backdrop-blur-sm border border-glass rounded-xl p-6 text-center">
-                                        <p className="text-4xl font-bold text-indigo-400 mb-1">1200+</p>
-                                        <p className="text-sm text-text-secondary">Active Users</p>
+                                    <div className="bg-glass backdrop-blur-sm border border-glass rounded-lg sm:rounded-xl p-4 sm:p-6 text-center">
+                                        <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-indigo-400 mb-1">1200+</p>
+                                        <p className="text-xs sm:text-sm text-text-secondary">Users</p>
                                     </div>
-                                    <div className="bg-glass backdrop-blur-sm border border-glass rounded-xl p-6 text-center">
-                                        <p className="text-4xl font-bold text-indigo-400 mb-1">100K+</p>
-                                        <p className="text-sm text-text-secondary">Monthly Views</p>
+                                    <div className="bg-glass backdrop-blur-sm border border-glass rounded-lg sm:rounded-xl p-4 sm:p-6 text-center">
+                                        <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-indigo-400 mb-1">100K+</p>
+                                        <p className="text-xs sm:text-sm text-text-secondary">Views</p>
                                     </div>
-                                    <div className="bg-glass backdrop-blur-sm border border-glass rounded-xl p-6 text-center">
-                                        <p className="text-4xl font-bold text-indigo-400 mb-1">24/7</p>
-                                        <p className="text-sm text-text-secondary">Support</p>
+                                    <div className="bg-glass backdrop-blur-sm border border-glass rounded-lg sm:rounded-xl p-4 sm:p-6 text-center">
+                                        <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-indigo-400 mb-1">24/7</p>
+                                        <p className="text-xs sm:text-sm text-text-secondary">Support</p>
                                     </div>
                                 </div>
                             </div>
@@ -288,21 +280,21 @@ const HomePage = () => {
             </AnimatedSection>
 
             {/* Trending Blogs Section */}
-            <AnimatedSection id="blog-section" className="py-20 px-4 scroll-snap-section bg-gradient-to-b from-transparent via-indigo-500/5 to-transparent">
+            <AnimatedSection id="blog-section" className="py-12 sm:py-16 md:py-20 px-3 sm:px-4 scroll-snap-section bg-gradient-to-b from-transparent via-indigo-500/5 to-transparent">
                 <div className="max-w-7xl mx-auto">
                     {/* Section Header */}
-                    <div className="text-center mb-16">
-                        <div className="inline-flex items-center gap-3 bg-glass backdrop-blur-sm border border-glass px-6 py-2 rounded-full mb-6">
-                            <span className="relative flex h-3 w-3">
+                    <div className="text-center mb-10 sm:mb-12 md:mb-16">
+                        <div className="inline-flex items-center gap-2 sm:gap-3 bg-glass backdrop-blur-sm border border-glass px-4 sm:px-6 py-1.5 sm:py-2 rounded-full mb-4 sm:mb-6">
+                            <span className="relative flex h-2 sm:h-3 w-2 sm:w-3">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-3 w-3 bg-indigo-500"></span>
+                                <span className="relative inline-flex rounded-full h-2 sm:h-3 w-2 sm:w-3 bg-indigo-500"></span>
                             </span>
-                            <span className="text-sm font-semibold text-text-secondary uppercase tracking-wider">Latest Posts</span>
+                            <span className="text-xs sm:text-sm font-semibold text-text-secondary uppercase tracking-wider">Latest Posts</span>
                         </div>
-                        <h2 className="text-5xl md:text-6xl font-extrabold text-text-primary mb-4">
+                        <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-extrabold text-text-primary mb-2 sm:mb-4 px-2">
                             Featured <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Blogs</span>
                         </h2>
-                        <p className="text-lg text-text-secondary max-w-2xl mx-auto">
+                        <p className="text-xs sm:text-sm md:text-base lg:text-lg text-text-secondary max-w-2xl mx-auto px-2">
                             Discover the most engaging stories from our community of talented writers
                         </p>
                     </div>
@@ -312,7 +304,7 @@ const HomePage = () => {
                         <SkeletonCardGrid count={3} />
                     ) : posts.length > 0 ? (
                         <>
-                            <section className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-24 reveal-on-scroll">
+                            <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mt-10 sm:mt-14 lg:mt-24 reveal-on-scroll">
                                 {posts.map((post, index) => (
                                     <div
                                         key={post.id}
@@ -325,14 +317,14 @@ const HomePage = () => {
                             </section>
 
                             {/* View All Button */}
-                            <div className="text-center">
+                            <div className="text-center flex justify-center mt-8 sm:mt-12">
                                 <button
                                     onClick={() => navigate('/explore-blogs')}
-                                    className="group relative inline-flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg hover:shadow-indigo-500/50 transition-all duration-300 hover:scale-105"
+                                    className="group relative inline-flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-6 sm:px-8 py-2 sm:py-4 rounded-full font-semibold text-sm sm:text-lg shadow-lg hover:shadow-indigo-500/50 transition-all duration-300 hover:scale-105"
                                 >
                                     <span>Explore All Blogs</span>
                                     <svg
-                                        className="w-5 h-5 transform group-hover:translate-x-1 transition-transform"
+                                        className="w-4 sm:w-5 h-4 sm:h-5 transform group-hover:translate-x-1 transition-transform"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -343,14 +335,14 @@ const HomePage = () => {
                             </div>
                         </>
                     ) : (
-                        <div className="text-center py-20">
-                            <div className="bg-glass backdrop-blur-sm border border-glass rounded-2xl p-12 max-w-md mx-auto">
-                                <div className="text-6xl mb-4">📝</div>
-                                <h3 className="text-2xl font-bold text-text-primary mb-2">No Blogs Yet</h3>
-                                <p className="text-text-secondary mb-6">Be the first to share your story with the community!</p>
+                        <div className="text-center py-12 sm:py-16 md:py-20 px-3 sm:px-4">
+                            <div className="bg-glass backdrop-blur-sm border border-glass rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-12 max-w-md mx-auto">
+                                <div className="text-3xl sm:text-4xl md:text-6xl mb-3 sm:mb-4">📝</div>
+                                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-text-primary mb-2">No Blogs Yet</h3>
+                                <p className="text-xs sm:text-sm text-text-secondary mb-4 sm:mb-6">Be the first to share your story with the community!</p>
                                 <button
                                     onClick={() => navigate(isAuthenticated ? '/create-post' : '/auth')}
-                                    className="bg-indigo-500 text-white px-6 py-3 rounded-full font-semibold hover:bg-indigo-600 transition-colors"
+                                    className="bg-indigo-500 text-white px-5 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm font-semibold hover:bg-indigo-600 transition-colors"
                                 >
                                     Create First Blog
                                 </button>
@@ -361,61 +353,61 @@ const HomePage = () => {
             </AnimatedSection>
 
             {/* Popular Categories */}
-            <AnimatedSection className="py-20 px-4 scroll-snap-section">
-                <div className="max-w-5xl mx-auto text-center"><h2 className="text-3xl font-bold text-text-primary">Popular Categories</h2><div className="mt-10 flex flex-wrap justify-center gap-4">{categories.map(cat => (<button key={cat} onClick={() => navigate('/categories')} className="bg-glass backdrop-blur-sm border border-glass text-text-primary px-5 py-2 rounded-full font-semibold hover:bg-white/20 transition-colors">{cat}</button>))}</div></div>
+            <AnimatedSection className="py-12 sm:py-16 md:py-20 px-3 sm:px-4 scroll-snap-section">
+                <div className="max-w-5xl mx-auto text-center"><h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-text-primary">Popular Categories</h2><div className="mt-6 sm:mt-10 flex flex-wrap justify-center gap-2 sm:gap-4">{categories.map(cat => (<button key={cat} onClick={() => navigate('/categories')} className="bg-glass backdrop-blur-sm border border-glass text-text-primary px-3 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold hover:bg-white/20 transition-colors">{cat}</button>))}</div></div>
             </AnimatedSection>
 
             {/* Community Stats & Testimonials Section */}
-            <AnimatedSection className="py-20 px-4 scroll-snap-section">
+            <AnimatedSection className="py-12 sm:py-16 md:py-20 px-3 sm:px-4 scroll-snap-section">
                 <div className="max-w-5xl mx-auto text-center">
-                    <div className="grid grid-cols-3 gap-8 mb-10">
-                        <div className="transform transition-transform duration-300 hover:scale-110">
-                            <p className="text-4xl font-bold text-indigo-400">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 md:gap-8 mb-8 sm:mb-10">
+                        <div className="transform transition-transform duration-300 hover:scale-105 sm:hover:scale-110 px-2">
+                            <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-indigo-400">
                                 <AnimatedCounter end={5000} suffix="+" />
                             </p>
-                            <p className="text-text-secondary mt-2">Blogs Shared</p>
-                            <div className="mt-3 inline-block">
-                                <span className="relative bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-500 text-white text-xs font-extrabold px-4 py-2 rounded-lg shadow-[0_0_25px_rgba(52,211,153,0.7)] border-2 border-emerald-300/60 backdrop-blur-sm animate-pulse hover:scale-105 transition-transform">
+                            <p className="text-xs sm:text-sm text-text-secondary mt-2">Blogs Shared</p>
+                            <div className="mt-2 sm:mt-3 inline-block">
+                                <span className="relative bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-500 text-white text-xs font-extrabold px-3 sm:px-4 py-1 sm:py-2 rounded-lg shadow-[0_0_25px_rgba(52,211,153,0.7)] border-2 border-emerald-300/60 backdrop-blur-sm animate-pulse hover:scale-105 transition-transform">
                                     ✨ Every Day
                                 </span>
                             </div>
                         </div>
-                        <div className="transform transition-transform duration-300 hover:scale-110">
-                            <p className="text-4xl font-bold text-indigo-400">
+                        <div className="transform transition-transform duration-300 hover:scale-105 sm:hover:scale-110 px-2">
+                            <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-indigo-400">
                                 <AnimatedCounter end={1200} suffix="+" />
                             </p>
-                            <p className="text-text-secondary mt-2">Active Users</p>
-                            <div className="mt-3 inline-block">
-                                <span className="relative bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-500 text-white text-xs font-extrabold px-4 py-2 rounded-lg shadow-[0_0_25px_rgba(52,211,153,0.7)] border-2 border-emerald-300/60 backdrop-blur-sm animate-pulse hover:scale-105 transition-transform">
+                            <p className="text-xs sm:text-sm text-text-secondary mt-2">Active Users</p>
+                            <div className="mt-2 sm:mt-3 inline-block">
+                                <span className="relative bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-500 text-white text-xs font-extrabold px-3 sm:px-4 py-1 sm:py-2 rounded-lg shadow-[0_0_25px_rgba(52,211,153,0.7)] border-2 border-emerald-300/60 backdrop-blur-sm animate-pulse hover:scale-105 transition-transform">
                                     ✨ Every Day
                                 </span>
                             </div>
                         </div>
-                        <div className="transform transition-transform duration-300 hover:scale-110">
-                            <p className="text-4xl font-bold text-indigo-400">
+                        <div className="transform transition-transform duration-300 hover:scale-105 sm:hover:scale-110 px-2">
+                            <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-indigo-400">
                                 <AnimatedCounter end={100000} suffix="+" />
                             </p>
-                            <p className="text-text-secondary mt-2">Monthly Views</p>
+                            <p className="text-xs sm:text-sm text-text-secondary mt-2">Monthly Views</p>
                         </div>
                     </div>
-                    <h2 className="text-3xl font-bold text-text-primary">Join a growing community of storytellers!</h2>
+                    <h2 className="text-lg sm:text-xl md:text-3xl font-bold text-text-primary px-2">Join a growing community of storytellers!</h2>
                     <RotatingTestimonials />
                 </div>
             </AnimatedSection>
 
             {/* FAQ Section */}
-            <div className="py-20 px-4">
-                <div className="max-w-3xl mx-auto"><h2 className="text-4xl font-extrabold text-text-primary text-center mb-12">Frequently Asked Questions</h2><div className="space-y-4"><FaqItem question="Is HashNode free to use?" answer="Yes, HashNode is completely free for both readers and writers. You can sign up and start publishing your stories today without any cost." /><FaqItem question="Can I customize my blog's appearance?" answer="While we maintain a consistent and beautiful design across the platform, you can customize your profile page with a banner, profile picture, and bio to express your personality." /><FaqItem question="How do I get my blog featured?" answer="Our editorial team regularly reviews new content. High-quality, engaging, and original posts have the best chance of being featured on our homepage and in our newsletter." /></div></div>
+            <div className="py-12 sm:py-16 md:py-20 px-3 sm:px-4">
+                <div className="max-w-3xl mx-auto"><h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-text-primary text-center mb-8 sm:mb-12">Frequently Asked Questions</h2><div className="space-y-3 sm:space-y-4"><FaqItem question="Is HashNode free to use?" answer="Yes, HashNode is completely free for both readers and writers. You can sign up and start publishing your stories today without any cost." /><FaqItem question="Can I customize my blog's appearance?" answer="While we maintain a consistent and beautiful design across the platform, you can customize your profile page with a banner, profile picture, and bio to express your personality." /><FaqItem question="How do I get my blog featured?" answer="Our editorial team regularly reviews new content. High-quality, engaging, and original posts have the best chance of being featured on our homepage and in our newsletter." /></div></div>
             </div>
 
             {/* CTA Section */}
-            <AnimatedSection className="py-20 px-4">
-                <section className="mt-32 mb-20 reveal-on-scroll">
-                    <div className="max-w-4xl mx-auto text-center bg-glass p-12 rounded-xl border border-glass">
-                        <h2 className="text-4xl font-bold text-text-primary">Ready to share your thoughts?</h2>
-                        <p className="mt-4 text-text-secondary">Start your blog today!</p>
-                        <div className="mt-8 flex justify-center">
-                            <button onClick={() => navigate('/auth', { state: { show: 'register' } })} className="bg-indigo-500 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-indigo-600 transition-colors">Get Started / Join Now</button>
+            <AnimatedSection className="py-12 sm:py-16 md:py-20 px-3 sm:px-4">
+                <section className="mt-12 sm:mt-16 md:mt-20 lg:mt-32 mb-12 sm:mb-16 md:mb-20 reveal-on-scroll">
+                    <div className="max-w-4xl mx-auto text-center bg-glass p-6 sm:p-8 md:p-12 rounded-lg sm:rounded-xl border border-glass">
+                        <h2 className="text-xl sm:text-2xl md:text-4xl font-bold text-text-primary px-2">Ready to share your thoughts?</h2>
+                        <p className="mt-2 sm:mt-3 md:mt-4 text-xs sm:text-sm md:text-base text-text-secondary">Start your blog today!</p>
+                        <div className="mt-6 sm:mt-8 flex justify-center">
+                            <button onClick={() => navigate('/auth', { state: { show: 'register' } })} className="bg-indigo-500 text-white px-6 sm:px-8 py-2 sm:py-3 rounded-full text-sm sm:text-lg font-semibold hover:bg-indigo-600 transition-colors">Get Started / Join Now</button>
                         </div>
                     </div>
                 </section>

@@ -19,17 +19,17 @@ const PostCard = ({ post }) => {
 
     return (
         <div
-            className="bg-glass backdrop-blur-md rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer border border-glass"
+            className="bg-glass backdrop-blur-md rounded-lg sm:rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer border border-glass"
            onClick={handleClick}
         >
             <img
-                className="w-full h-48 object-cover"
+                className="w-full h-40 sm:h-48 object-cover"
                 src={imageUrl}
                 alt={post?.title || 'Blog post image'}
                 onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/800x400/1B263B/E0E1DD?text=Image+Error'; }} />
-            <div className="p-6">
-                <h3 className="text-xl font-bold text-text-primary mb-2">{post?.title || 'Untitled Post'}</h3>
-                <p className="text-text-secondary text-sm">
+            <div className="p-4 sm:p-5 md:p-6">
+                <h3 className="text-base sm:text-lg md:text-xl font-bold text-text-primary mb-2 line-clamp-2">{post?.title || 'Untitled Post'}</h3>
+                <p className="text-xs sm:text-sm text-text-secondary">
                     By {authorName} on {postDate ? new Date(postDate).toLocaleDateString() : 'Unknown Date'}
                 </p>
             </div>
