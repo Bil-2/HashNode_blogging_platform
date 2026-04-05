@@ -36,13 +36,15 @@ const PasswordInput = ({ id, label, value, onChange, placeholder }) => {
                     value={value}
                     onChange={onChange}
                     autoComplete={id === 'password' ? 'current-password' : id === 'confirmPassword' ? 'new-password' : 'off'}
-                    className="appearance-none relative block w-full px-3 py-2 border border-glass placeholder-text-secondary text-text-primary text-sm bg-transparent rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="appearance-none relative block w-full pl-3 pr-14 py-2 border border-glass placeholder-text-secondary text-text-primary text-sm bg-transparent rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     placeholder={placeholder}
                 />
                 <button
                     type="button"
                     onClick={toggleVisibility}
-                    className="absolute inset-y-0 right-0 px-2 sm:px-3 flex items-center text-text-secondary hover:text-text-primary transition-colors"
+                    className="absolute inset-y-0 right-0 px-3 flex items-center text-text-secondary hover:text-text-primary transition-colors focus:outline-none"
+                    tabIndex="-1"
+                    aria-label={isVisible ? "Hide password" : "Show password"}
                 >
                     {isVisible ? (
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

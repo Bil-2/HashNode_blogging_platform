@@ -95,10 +95,10 @@ select {
 }
 
 .light {
-    --background: #ffffff;
-    --text-primary: #111827;
-    --text-secondary: #374151;
-    --glass-bg: rgba(255, 255, 255, 0.4);
+    --background: #ced0d278;
+    --text-primary: #3e4450;
+    --text-secondary: #334155;
+    --glass-bg: rgba(255, 255, 255, 0.3);
     --glass-border: rgba(0, 0, 0, 0.08);
     --accent: #4f46e5;
     --accent-hover: #6366f1;
