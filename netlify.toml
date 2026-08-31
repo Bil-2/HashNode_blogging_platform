@@ -8,9 +8,8 @@
 [functions]
   node_bundler = "esbuild"
   included_files = ["server/**"]
-  # 26s timeout — gives Atlas free-tier enough time to wake up on cold start.
-  # Default Netlify timeout is 10s which is NOT enough for Atlas cold starts.
-  timeout = 26
+  # Note: Function timeout is set in the Netlify dashboard under
+  # Site configuration → Functions → Timeout (max 26s on paid plans)
 
 [build.environment]
   NODE_VERSION = "20"
