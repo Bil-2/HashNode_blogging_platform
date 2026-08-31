@@ -13,32 +13,16 @@ const connectDB = async () => {
   }
 
   if (!cached.promise) {
-    const uri = process.env.MONGO_URI;
-    if (!uri) {
-      throw new Error('MONGO_URI environment variable is not set');
-    }
-
-    cached.promise = mongoose.connect(uri, {
-      maxPoolSize: 5,
-      // Netlify functions timeout at 10s (free) or 26s (paid).
-      // Keep these well under the function timeout so we can return a proper error.
-      serverSelectionTimeoutMS: 8000,
-      connectTimeoutMS: 8000,
-      socketTimeoutMS: 20000,
-      family: 4,       // Force IPv4 — avoids DNS lookup delays on serverless
+    cached.promise = mongoose.connect(process.env.MONGO_URI, {
+      maxPoolSize: 10,
+      serverSelectionTimeoutMS: 30000, // 30s — allows Atlas free-tier to wake up on cold start
+      socketTimeoutMS: 45000,
+      family: 4,
       retryWrites: true,
       w: 'majority',
     }).then((mongooseInstance) => {
       console.log(`MongoDB Connected: ${mongooseInstance.connection.host}`);
       return mongooseInstance;
-    }).catch((err) => {
-      // Log full error details so Netlify function logs show the real problem
-      console.error('MongoDB connection failed:', {
-        message: err.message,
-        code: err.code,
-        uri: uri.replace(/:\/\/[^@]+@/, '://***:***@'), // mask credentials in logs
-      });
-      throw err;
     });
   }
 
@@ -46,7 +30,8 @@ const connectDB = async () => {
     cached.conn = await cached.promise;
   } catch (error) {
     cached.promise = null; // reset so next request retries
-    throw error;
+    console.error(`MongoDB connection error: ${error.message}`);
+    throw error; // Let the handler deal with it — never call process.exit() in serverless
   }
 
   return cached.conn;

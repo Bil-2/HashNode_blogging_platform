@@ -8,11 +8,9 @@
 [functions]
   node_bundler = "esbuild"
   included_files = ["server/**"]
-  # Note: Function timeout is set in the Netlify dashboard under
-  # Site configuration → Functions → Timeout (max 26s on paid plans)
 
 [build.environment]
-  NODE_VERSION = "20"
+  NODE_VERSION = "18"
 
 # Redirect rules for API routes -> Netlify Functions
 # NOTE: No :splat in the target — this preserves event.path as the original
