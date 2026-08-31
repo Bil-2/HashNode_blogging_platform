@@ -54,9 +54,11 @@ const buildSessionMiddleware = () => {
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
-      // Reuse the existing mongoose connection — no second DB connection
-      client: mongoose.connection.getClient(),
+      // Use mongoUrl instead of client: to avoid race condition
+      // where getClient() is called before mongoose connection is ready.
+      mongoUrl: process.env.MONGO_URI,
       touchAfter: 24 * 3600,
+      ttl: 24 * 60 * 60, // 24 hours
     }),
     cookie: {
       secure: process.env.NODE_ENV === 'production',

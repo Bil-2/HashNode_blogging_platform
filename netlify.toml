@@ -8,9 +8,12 @@
 [functions]
   node_bundler = "esbuild"
   included_files = ["server/**"]
+  # 26s timeout — gives Atlas free-tier enough time to wake up on cold start.
+  # Default Netlify timeout is 10s which is NOT enough for Atlas cold starts.
+  timeout = 26
 
 [build.environment]
-  NODE_VERSION = "18"
+  NODE_VERSION = "20"
 
 # Redirect rules for API routes -> Netlify Functions
 # NOTE: No :splat in the target — this preserves event.path as the original
